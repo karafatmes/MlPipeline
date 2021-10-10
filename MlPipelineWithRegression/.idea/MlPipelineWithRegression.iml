@@ -6,5 +6,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="SimpleMlPipeline" />
     <orderEntry type="module" module-name="MlPipeline" />
+    <orderEntry type="module" module-name="MixScalerMlPipeline" />
+    <orderEntry type="module" module-name="StandardScalerMlPipeline" />
   </component>
 </module>

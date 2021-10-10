@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../MixScalerMlPipeline/.idea/MixScalerMlPipeline.iml" filepath="$PROJECT_DIR$/../MixScalerMlPipeline/.idea/MixScalerMlPipeline.iml" />
       <module fileurl="file://$PROJECT_DIR$/../MlPipeline/.idea/MlPipeline.iml" filepath="$PROJECT_DIR$/../MlPipeline/.idea/MlPipeline.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/MlPipelineWithRegression.iml" filepath="$PROJECT_DIR$/.idea/MlPipelineWithRegression.iml" />
       <module fileurl="file://$PROJECT_DIR$/../SimpleMlPipeline/.idea/SimpleMlPipeline.iml" filepath="$PROJECT_DIR$/../SimpleMlPipeline/.idea/SimpleMlPipeline.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../StandardScalerMlPipeline/.idea/StandardScalerMlPipeline.iml" filepath="$PROJECT_DIR$/../StandardScalerMlPipeline/.idea/StandardScalerMlPipeline.iml" />
     </modules>
   </component>
 </project>
