@@ -49,7 +49,7 @@ public class PipelineReadingDataFromDataframe extends AbstractPipeline {
 	public Dataset<Row> create_schema() {
 		
 		/// create schema
-		StructType schemata =  new StructType()
+		StructType schema =  new StructType()
 		        .add("id", DataTypes.IntegerType, true)
 		        .add("category_1", DataTypes.StringType, true)
 		        .add("category_2", DataTypes.StringType, true);
@@ -64,7 +64,7 @@ public class PipelineReadingDataFromDataframe extends AbstractPipeline {
 		
 		List<Row> rows = ImmutableList.of(row1, row2, row3, row4, row5);
 		
-		Dataset<Row> dataSet = getSession().createDataFrame(rows, schemata);
+		Dataset<Row> dataSet = getSession().createDataFrame(rows, schema);
 		
 		dataSet.printSchema();
 		
