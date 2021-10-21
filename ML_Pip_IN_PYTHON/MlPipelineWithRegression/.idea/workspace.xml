@@ -1,39 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="acdc253c-bda8-4bd8-b34b-6eed74319805" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../../MixScalerMlPipeline/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MixScalerMlPipeline/.idea/MixScalerMlPipeline.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MixScalerMlPipeline/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MixScalerMlPipeline/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MixScalerMlPipeline/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MixScalerMlPipeline/mixScaler_ml_pipeline.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MlPipeline/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MlPipeline/.idea/MlPipeline.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MlPipeline/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MlPipeline/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MlPipeline/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MlPipeline/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MlPipeline/main_app.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MlPipeline/records.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MlPipeline/test.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MlPipeline/train.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MlPipelineWithRegression/.idea/MlPipelineWithRegression.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MlPipelineWithRegression/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MlPipelineWithRegression/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MlPipelineWithRegression/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MlPipelineWithRegression/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MlPipelineWithRegression/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MlPipelineWithRegression/ml_pipeline_with_regression.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../SimpleMlPipeline/.idea/SimpleMlPipeline.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../SimpleMlPipeline/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../SimpleMlPipeline/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../SimpleMlPipeline/ml_pipeline.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../StandardScalerMlPipeline/.idea/StandardScalerMlPipeline.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../StandardScalerMlPipeline/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../StandardScalerMlPipeline/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../StandardScalerMlPipeline/standardScalerMlPipeline.py" beforeDir="false" />
-    </list>
+    <list default="true" id="acdc253c-bda8-4bd8-b34b-6eed74319805" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -61,7 +29,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.mixScaler_ml_pipeline (1)">
+  <component name="RunManager" selected="Python.ml_pipeline">
     <configuration name="main_app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MlPipeline" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -169,10 +137,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.ml_pipeline" />
         <item itemvalue="Python.mixScaler_ml_pipeline (1)" />
         <item itemvalue="Python.standardScalerMlPipeline (1)" />
         <item itemvalue="Python.ml_pipeline_with_regression" />
-        <item itemvalue="Python.ml_pipeline" />
         <item itemvalue="Python.main_app" />
       </list>
     </recent_temporary>
