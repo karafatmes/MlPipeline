@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="acdc253c-bda8-4bd8-b34b-6eed74319805" name="Default Changelist" comment="" />
+    <list default="true" id="acdc253c-bda8-4bd8-b34b-6eed74319805" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../../MlPipelinesInJavaEnvironment/.classpath" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../MlPipelinesInJavaEnvironment/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../MlPipelinesInJavaEnvironment/.settings/org.eclipse.jdt.core.prefs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../MlPipelinesInJavaEnvironment/.settings/org.eclipse.m2e.core.prefs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../MlPipelinesInJavaEnvironment/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../MlPipelinesInJavaEnvironment/src/main/java/pipeline_generator/PipelineFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../MlPipelinesInJavaEnvironment/src/main/java/pipeline_generator/PipelineGenerator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../MlPipelinesInJavaEnvironment/src/main/java/pipelines/AbstractPipeline.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../MlPipelinesInJavaEnvironment/src/main/java/pipelines/PipelineReadingDataFromCsv.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../MlPipelinesInJavaEnvironment/src/main/java/pipelines/PipelineReadingDataFromDataframe.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../MlPipelinesInJavaEnvironment/src/main/java/pipelines/PipelineWithMixedScaler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../MlPipelinesInJavaEnvironment/src/main/java/pipelines/PipelineWithRegression.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../MlPipelinesInJavaEnvironment/src/main/java/pipelines/PipelineWithStandardScaler.java" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

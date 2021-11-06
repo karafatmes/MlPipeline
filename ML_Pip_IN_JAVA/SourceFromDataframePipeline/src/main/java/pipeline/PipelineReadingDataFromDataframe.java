@@ -1,6 +1,5 @@
 package pipeline;
 
-import java.util.List;
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.ml.PipelineStage;
@@ -8,12 +7,8 @@ import org.apache.spark.ml.feature.OneHotEncoder;
 import org.apache.spark.ml.feature.StringIndexer;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.types.DataTypes;
-import org.apache.spark.sql.types.StructType;
 
-import com.google.common.collect.ImmutableList;
 
 public class PipelineReadingDataFromDataframe {
 
@@ -21,7 +16,7 @@ public class PipelineReadingDataFromDataframe {
 
 		PipelineModel model = create_pipeline();
 
-		Dataset<Row> updated = model.transform(create_schema());
+		Dataset<Row> updated = model.transform(read_data_from_file());
 
 		updated.show();
 
@@ -41,34 +36,21 @@ public class PipelineReadingDataFromDataframe {
 		Pipeline pipeline = new Pipeline()
 				.setStages(new PipelineStage[] { category1Indexer, category2Indexer, oneHotEncoder });
 
-		PipelineModel model = pipeline.fit(create_schema());
+		PipelineModel model = pipeline.fit(read_data_from_file());
 
 		return model;
 
 	}
-
-	public static Dataset<Row> create_schema() {
-
-		/// create schema
-		StructType schema = new StructType().add("id", DataTypes.IntegerType, true)
-				.add("category_1", DataTypes.StringType, true).add("category_2", DataTypes.StringType, true);
-
-		/// create rows
-		Row row1 = RowFactory.create(1, "L101", 'R');
-		Row row2 = RowFactory.create(2, "L201", 'C');
-		Row row3 = RowFactory.create(3, "D111", 'R');
-		Row row4 = RowFactory.create(4, "F210", 'R');
-		Row row5 = RowFactory.create(5, "D110", 'C');
-
-		List<Row> rows = ImmutableList.of(row1, row2, row3, row4, row5);
-
-		Dataset<Row> dataSet = createSession().createDataFrame(rows, schema);
-
+	
+	// read data from file
+	public static Dataset<Row> read_data_from_file() {
+		
+		Dataset<Row> dataSet = createSession().read().format("csv").option("header","true").option("inferSchema", "true").load("./src/main/resources/file.txt");
+		dataSet.show();
 		dataSet.printSchema();
-
 		return dataSet;
-
 	}
+
 
 	public static SparkSession createSession() {
 		// Start session with Spark

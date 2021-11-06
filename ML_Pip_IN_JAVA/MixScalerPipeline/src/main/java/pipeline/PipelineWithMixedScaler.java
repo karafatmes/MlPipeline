@@ -1,21 +1,14 @@
 package pipeline;
 
-import java.util.List;
 
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.ml.PipelineStage;
 import org.apache.spark.ml.feature.MinMaxScaler;
-import org.apache.spark.ml.linalg.VectorUDT;
-import org.apache.spark.ml.linalg.Vectors;
+import org.apache.spark.ml.feature.VectorAssembler;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.types.DataTypes;
-import org.apache.spark.sql.types.StructType;
-
-import com.google.common.collect.ImmutableList;
 
 public class PipelineWithMixedScaler {
 
@@ -23,7 +16,7 @@ public class PipelineWithMixedScaler {
 
 		PipelineModel model = create_pipeline();
 
-		Dataset<Row> updated = model.transform(create_schema());
+		Dataset<Row> updated = model.transform(read_data_from_file());
 
 		updated.show();
 
@@ -31,31 +24,25 @@ public class PipelineWithMixedScaler {
 
 	public static PipelineModel create_pipeline() {
 		// first stage of pipeline
+		VectorAssembler assembler = new VectorAssembler()
+			      .setInputCols(new String[] {"featurecol1", "featurecol2", "featurecol3"})
+			      .setOutputCol("features");
+		// second stage of pipeline
 		MinMaxScaler standScaler = new MinMaxScaler().setInputCol("features").setOutputCol("sfeatures");
 		// setup the pipeline
-		Pipeline pipeline = new Pipeline().setStages(new PipelineStage[] { standScaler });
+		Pipeline pipeline = new Pipeline().setStages(new PipelineStage[] { assembler, standScaler });
 
-		PipelineModel model = pipeline.fit(create_schema());
+		PipelineModel model = pipeline.fit(read_data_from_file());
 
 		return model;
 	}
-
-	public static Dataset<Row> create_schema() {
-		/// create schema
-		StructType schema = new StructType().add("id", DataTypes.IntegerType, true).add("features", new VectorUDT(),
-				true);
-
-		/// create rows
-		Row row1 = RowFactory.create(1, Vectors.dense(10.0, 10000.0, 1.0));
-		Row row2 = RowFactory.create(2, Vectors.dense(20.0, 30000.0, 2.0));
-		Row row3 = RowFactory.create(3, Vectors.dense(30.0, 40000.0, 3.0));
-
-		List<Row> rows = ImmutableList.of(row1, row2, row3);
-
-		Dataset<Row> dataSet = createSession().createDataFrame(rows, schema);
-
+	
+	// read data from file
+	public static Dataset<Row> read_data_from_file() {
+		
+		Dataset<Row> dataSet = createSession().read().format("csv").option("header","true").option("inferSchema", "true").load("./src/main/resources/file.txt");
 		dataSet.show();
-
+		dataSet.printSchema();
 		return dataSet;
 	}
 

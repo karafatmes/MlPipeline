@@ -1,7 +1,5 @@
 package pipeline;
 
-import java.util.List;
-
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.ml.PipelineStage;
@@ -11,12 +9,7 @@ import org.apache.spark.ml.feature.StringIndexer;
 import org.apache.spark.ml.feature.VectorAssembler;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.types.DataTypes;
-import org.apache.spark.sql.types.StructType;
-
-import com.google.common.collect.ImmutableList;
 
 public class PipelineWithRegression {
 
@@ -24,7 +17,7 @@ public class PipelineWithRegression {
 
 		PipelineModel model = create_pipeline();
 
-		Dataset<Row> updated = model.transform(create_schema());
+		Dataset<Row> updated = model.transform(read_data_from_file());
 
 		updated.show();
 
@@ -51,33 +44,18 @@ public class PipelineWithRegression {
 		Pipeline pipeline = new Pipeline().setStages(new PipelineStage[] { feature2Indexer, feature3Indexer,
 				oneHotEncoder, vectorAssembler, logisticRegression });
 
-		PipelineModel model = pipeline.fit(create_schema());
+		PipelineModel model = pipeline.fit(read_data_from_file());
 
 		return model;
 	}
 
-	public static Dataset<Row> create_schema() {
-
-		/// create schema
-		StructType schema = new StructType().add("feature_1", DataTypes.DoubleType, true)
-				.add("feature_2", DataTypes.StringType, true).add("feature_3", DataTypes.StringType, true)
-				.add("feature_4", DataTypes.IntegerType, true).add("label", DataTypes.DoubleType, true);
-
-		/// create rows
-		Row row1 = RowFactory.create(2.0, 'A', "S10", 40, 1.0);
-		Row row2 = RowFactory.create(1.0, 'X', "E10", 25, 1.0);
-		Row row3 = RowFactory.create(4.0, 'X', "S20", 10, 0.0);
-		Row row4 = RowFactory.create(3.0, 'Z', "S10", 20, 0.0);
-		Row row5 = RowFactory.create(4.0, 'A', "E10", 30, 1.0);
-		Row row6 = RowFactory.create(2.0, 'Z', "S10", 40, 0.0);
-		Row row7 = RowFactory.create(5.0, 'X', "D10", 10, 1.0);
-
-		List<Row> rows = ImmutableList.of(row1, row2, row3, row4, row5, row6, row7);
-
-		Dataset<Row> dataSet = createSession().createDataFrame(rows, schema);
-
+	
+	// read data from file
+	public static Dataset<Row> read_data_from_file() {
+		
+		Dataset<Row> dataSet = createSession().read().format("csv").option("header","true").option("inferSchema", "true").load("./src/main/resources/file.txt");
 		dataSet.show();
-
+		dataSet.printSchema();
 		return dataSet;
 	}
 
