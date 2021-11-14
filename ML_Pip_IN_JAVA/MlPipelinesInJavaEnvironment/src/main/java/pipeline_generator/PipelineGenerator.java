@@ -38,7 +38,6 @@ public class PipelineGenerator {
 		welcomeMessage.append("--------------------------------------------------- \n");
 		welcomeMessage.append("--------Choose one of the following pipelines -----\n");
 		welcomeMessage.append(" 1) Pipeline reading data from dataframe \n");
-		welcomeMessage.append(" 2) Pipeline reading data from csv file \n");
 		welcomeMessage.append(" 3) Pipeline with Regression \n");
 		welcomeMessage.append(" 4) Pipeline with Standard Scaler \n");
 		welcomeMessage.append(" 5) Pipeline with Mixed Scaler \n");

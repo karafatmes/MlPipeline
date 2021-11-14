@@ -1,6 +1,5 @@
 package pipeline;
 
-
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.ml.PipelineStage;
@@ -25,8 +24,7 @@ public class PipelineWithMixedScaler {
 	public static PipelineModel create_pipeline() {
 		// first stage of pipeline
 		VectorAssembler assembler = new VectorAssembler()
-			      .setInputCols(new String[] {"featurecol1", "featurecol2", "featurecol3"})
-			      .setOutputCol("features");
+				.setInputCols(new String[] { "featurecol1", "featurecol2", "featurecol3" }).setOutputCol("features");
 		// second stage of pipeline
 		MinMaxScaler standScaler = new MinMaxScaler().setInputCol("features").setOutputCol("sfeatures");
 		// setup the pipeline
@@ -36,11 +34,12 @@ public class PipelineWithMixedScaler {
 
 		return model;
 	}
-	
+
 	// read data from file
 	public static Dataset<Row> read_data_from_file() {
-		
-		Dataset<Row> dataSet = createSession().read().format("csv").option("header","true").option("inferSchema", "true").load("./src/main/resources/file.txt");
+
+		Dataset<Row> dataSet = createSession().read().format("csv").option("header", "true")
+				.option("inferSchema", "true").load("./src/main/resources/file.txt");
 		dataSet.show();
 		dataSet.printSchema();
 		return dataSet;

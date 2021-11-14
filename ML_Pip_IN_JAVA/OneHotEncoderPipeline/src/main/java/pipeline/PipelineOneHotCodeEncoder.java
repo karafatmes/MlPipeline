@@ -10,7 +10,7 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 
 
-public class PipelineReadingDataFromDataframe {
+public class PipelineOneHotCodeEncoder {
 
 	public static void main(String[] args) {
 

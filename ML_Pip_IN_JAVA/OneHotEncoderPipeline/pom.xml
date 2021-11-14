@@ -1,0 +1,20 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>cs.uoi.thesis.dataframe</groupId>
+	<artifactId>one-hot-encoder</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>One Hot Encoder Pipeline</name>
+
+
+	<!-- https://mvnrepository.com/artifact/org.apache.spark/spark-mllib -->
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-mllib_2.13</artifactId>
+			<version>3.2.0</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+</project>
