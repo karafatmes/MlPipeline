@@ -57,12 +57,20 @@ public class SampleHandler extends AbstractHandler {
 		
 		// Analyze file that contains the data 
 		FileHandler fileHandler = new FileHandler(projectForAnalysis);
-		String[] columnsInFilefileHandler= fileHandler.getColumnsIncludedInFile();
+		String[] columnsInFilefile = fileHandler.getColumnsIncludedInFile();
 
 		IJavaProject javaProject  = ProjectAnalyzer.convertToIJavaProject(projectForAnalysis);
 		
 		SourceAnalyzer sourceAnalyzer = new SourceAnalyzer(javaProject);
-		List<IPackageFragment> sourcePackages = sourceAnalyzer.getSrcPackagesOfProject();
+		// print classes of project included in source package.
+		
+		sourceAnalyzer.printClassesIncludedInSourcePackages();
+		
+		List<MethodDeclaration> allMethodDeclarations = new ArrayList<MethodDeclaration>();
+		for (ICompilationUnit unit : sourceAnalyzer.getCompilationUnits()) {
+			List<MethodDeclaration> methodDeclarations = sourceAnalyzer.getMethodDeclarationsOfClass(unit);
+			allMethodDeclarations.addAll(methodDeclarations);
+		}
 		
 		printFinishMessage();
 		
@@ -101,7 +109,6 @@ public class SampleHandler extends AbstractHandler {
 		// this method read choice user given from keyboard
 		Scanner keyboard = new Scanner(System.in);
 		int choice = keyboard.nextInt();
-		keyboard.close();
 		return choice;
 	}
 	

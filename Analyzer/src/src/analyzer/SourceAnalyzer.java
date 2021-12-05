@@ -20,19 +20,48 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jface.text.Document;
 
-
-
 public class SourceAnalyzer {
-	
+
 	private IJavaProject javaProject;
-	
+	private List<IPackageFragment> sourcePackages;
+	List<ICompilationUnit> compilationUnits;
+
 	public SourceAnalyzer(IJavaProject javaproject) {
 		this.javaProject = javaproject;
+		sourcePackages = new ArrayList<IPackageFragment>();
+		compilationUnits = new ArrayList<ICompilationUnit>();
+		
+		findSrcPackagesOfProject();
+		findICompilationUnitsOfProject();
 	}
 
-	public List<IPackageFragment> getSrcPackagesOfProject() {
+	public IJavaProject getJavaProject() {
+		return javaProject;
+	}
 
-		List<IPackageFragment> sourcePackages = new ArrayList<IPackageFragment>();
+	public void setJavaProject(IJavaProject javaProject) {
+		this.javaProject = javaProject;
+	}
+
+	public List<IPackageFragment> getSourcePackages() {
+		return sourcePackages;
+	}
+
+	public void setSourcePackages(List<IPackageFragment> sourcePackages) {
+		this.sourcePackages = sourcePackages;
+	}
+	
+	public List<ICompilationUnit> getCompilationUnits() {
+		return compilationUnits;
+	}
+
+	public void setCompilationUnits(List<ICompilationUnit> compilationUnits) {
+		this.compilationUnits = compilationUnits;
+	}
+
+
+	private void findSrcPackagesOfProject() {
+
 		try {
 			IPackageFragment[] packages = javaProject.getPackageFragments();
 
@@ -44,12 +73,9 @@ public class SourceAnalyzer {
 				// folder
 				// K_BINARY would include also included JARS, e.g.
 				// rt.jar
-
+				// keep only packages that contains source code.
 				if (sourcepackage.getKind() == IPackageFragmentRoot.K_SOURCE) {
-					System.out.println("package " + sourcepackage.getElementName());
-					printICompilationUnitInfo(sourcepackage);
 					sourcePackages.add(sourcepackage);
-
 				}
 			}
 		} catch (JavaModelException e) {
@@ -58,61 +84,73 @@ public class SourceAnalyzer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return sourcePackages;
+	}
+
+	private void findICompilationUnitsOfProject() {
+		for (IPackageFragment sourcepackage : this.getSourcePackages()) {
+			try {
+				for (ICompilationUnit unit : sourcepackage.getCompilationUnits()) {
+					compilationUnits.add(unit);
+				}
+			} catch (JavaModelException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
-	private void printICompilationUnitInfo(IPackageFragment mypackage) throws JavaModelException {
-		for (ICompilationUnit unit : mypackage.getCompilationUnits()) {
-			printCompilationUnitDetails(unit);
-
-		}
-	}
-
-	private void printCompilationUnitDetails(ICompilationUnit unit) throws JavaModelException {
-		System.out.println("Source file " + unit.getElementName());
-		Document doc = new Document(unit.getSource());
-		getContentOfUnit(unit);
-		System.out.println("Has number of lines: " + doc.getNumberOfLines());
-		printIMethods(unit);
-	}
-
-	private void printIMethods(ICompilationUnit unit) throws JavaModelException {
-
-		IType[] allTypes = unit.getAllTypes();
-		for (IType type : allTypes) {
-			printIMethodDetails(type);
-		}
-	}
-
-	private void printIMethodDetails(IType type) throws JavaModelException {
-		IMethod[] methods = type.getMethods();
-		for (IMethod method : methods) {
-
-			System.out.println("Method name " + method.getElementName());
-			System.out.println("Signature " + method.getSignature());
-			System.out.println("Return Type " + method.getReturnType());
-
-		}
-	}
-
-	private void getContentOfUnit(ICompilationUnit unit) {
-		try {
-			IJavaElement[] elements = unit.getChildren();
-			CompilationUnit parse = parse(unit);
-			MethodVisitor visitor = new MethodVisitor();
-			parse.accept(visitor);
-			List<MethodDeclaration> methodDeclarations = MethodDeclarationFinder.perform(parse);
-
-			for (MethodDeclaration method : methodDeclarations) {
-				System.out.print("Method elements: " + method.getBody().statements());
+	
+	public void printClassesIncludedInSourcePackages() {
+		System.out.println(" ----- Included the following classes --------\n");
+		for (ICompilationUnit unit : this.getCompilationUnits()) {
+			System.out.println(" -----" + unit.getElementName()+"      --------\n");
+			try {
+				Document doc = new Document(unit.getSource());
+				System.out.println("---- "+ unit.getElementName() +" has number of lines: " + doc.getNumberOfLines()+"-----\n");
+			} catch (JavaModelException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-
-			System.out.println("okkk");
-		} catch (JavaModelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}
+		System.out.println(" ----------------------------------------------\n");
 	}
+
+
+//	private void printIMethods(ICompilationUnit unit) throws JavaModelException {
+//
+//		IType[] allTypes = unit.getAllTypes();
+//		for (IType type : allTypes) {
+//			printIMethodDetails(type);
+//		}
+//	}
+
+//	private void printIMethodDetails(IType type) throws JavaModelException {
+//		IMethod[] methods = type.getMethods();
+//		for (IMethod method : methods) {
+//
+//			System.out.println("Method name " + method.getElementName());
+//			System.out.println("Signature " + method.getSignature());
+//			System.out.println("Return Type " + method.getReturnType());
+//
+//		}
+//	}
+	
+	public List<MethodDeclaration> getMethodDeclarationsOfClass(ICompilationUnit unit) {
+		
+		List<MethodDeclaration> methodDeclarations = new ArrayList<MethodDeclaration>();
+		CompilationUnit parse = parse(unit);
+		
+		methodDeclarations = MethodDeclarationFinder.perform(parse);
+
+		for (MethodDeclaration method : methodDeclarations) {
+			System.out.print("Method elements: " + method.getBody().statements());
+		}
+		
+		return methodDeclarations;
+	}
+
+
 
 	private static CompilationUnit parse(ICompilationUnit unit) {
 		ASTParser parser = ASTParser.newParser(AST.JLS3);
