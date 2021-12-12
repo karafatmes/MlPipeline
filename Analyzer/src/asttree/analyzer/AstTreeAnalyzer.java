@@ -1,5 +1,4 @@
-package analyzerbasedonasttree.handlers;
-
+package asttree.analyzer;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,64 +15,63 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.core.IPackageFragment;
-import org.eclipse.jdt.core.IPackageFragmentRoot;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jface.text.Document;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
+import dependency.analyzer.DependencyAnalyzer;
 import file.handler.FileHandler;
 import project.analyzer.ProjectAnalyzer;
 import src.analyzer.SourceAnalyzer;
 import workspace.analyzer.WorkspaceAnalyzer;
 
-public class SampleHandler extends AbstractHandler {
-	
+public class AstTreeAnalyzer extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		
-		
 
 		printWelcomeMessage();
-		
+
 		IProject[] projects = WorkspaceAnalyzer.findProjectsInWorkspace();
-		
+
 		List<IProject> projectsWithJavaSourceCode = ProjectAnalyzer.keepOnlyProjectsContainedJavaSourceCode(projects);
-		
+
 		printAvailablJavaProjectsForAnalysis(projectsWithJavaSourceCode);
-		
+
 		// based on choice user choose project for analysis.
 		int choice = readChoice();
-		
-		IProject projectForAnalysis = ProjectAnalyzer.getProjectForAnalysis(choice,projectsWithJavaSourceCode);
-		
-		// Analyze file that contains the data 
+
+		IProject projectForAnalysis = ProjectAnalyzer.getProjectForAnalysis(choice, projectsWithJavaSourceCode);
+
+		// Analyze file that contains the data
 		FileHandler fileHandler = new FileHandler(projectForAnalysis);
 		String[] columnsInFilefile = fileHandler.getColumnsIncludedInFile();
 
-		IJavaProject javaProject  = ProjectAnalyzer.convertToIJavaProject(projectForAnalysis);
-		
+		IJavaProject javaProject = ProjectAnalyzer.convertToIJavaProject(projectForAnalysis);
+
 		SourceAnalyzer sourceAnalyzer = new SourceAnalyzer(javaProject);
 		// print classes of project included in source package.
-		
+
 		sourceAnalyzer.printClassesIncludedInSourcePackages();
-		
+
 		List<MethodDeclaration> allMethodDeclarations = new ArrayList<MethodDeclaration>();
 		for (ICompilationUnit unit : sourceAnalyzer.getCompilationUnits()) {
 			List<MethodDeclaration> methodDeclarations = sourceAnalyzer.getMethodDeclarationsOfClass(unit);
 			allMethodDeclarations.addAll(methodDeclarations);
 		}
-		
+
+		DependencyAnalyzer dependencyAnalyzer = new DependencyAnalyzer(allMethodDeclarations);
+		for (MethodDeclaration decl : allMethodDeclarations) {
+			dependencyAnalyzer.findMlLibDependencies(decl);
+		}
+		List<VariableDeclarationStatement> mlLibStatements = dependencyAnalyzer.getMlLibStatements();
+
+		for (VariableDeclarationStatement statement : mlLibStatements) {
+			
+			dependencyAnalyzer.analyzeStagesOfPipeline(statement, dependencyAnalyzer.getNameOfStagesInPipeline());
+			
+		}
 		printFinishMessage();
-		
+
 		return null;
 	}
 
@@ -111,16 +109,16 @@ public class SampleHandler extends AbstractHandler {
 		int choice = keyboard.nextInt();
 		return choice;
 	}
-	
+
 	public void printAvailablJavaProjectsForAnalysis(List<IProject> projects) {
 		StringBuilder availableJavaProjectsMessage = new StringBuilder();
 		availableJavaProjectsMessage.append("\n--------------------------------------------------------------\n");
 		availableJavaProjectsMessage.append("--------Choose one of the following  pipelines to analyze ------\n");
 		for (IProject project : projects) {
-			availableJavaProjectsMessage.append(
-					"\n--------" + projects.indexOf(project) + "------" + project.getName() + "-------\n");
+			availableJavaProjectsMessage
+					.append("\n--------" + projects.indexOf(project) + "------" + project.getName() + "-------\n");
 		}
 		System.out.println(availableJavaProjectsMessage.toString());
 	}
-	
+
 }

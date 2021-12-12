@@ -17,7 +17,7 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="analyzerbasedonasttree.handlers.SampleHandler"
+            class="asttree.analyzer.AstTreeAnalyzer"
             commandId="AnalyzerBasedOnAstTree.commands.sampleCommand">
       </handler>
    </extension>
@@ -53,7 +53,7 @@
                   id="AnalyzerBasedOnAstTree.toolbars.sampleCommand"
                   commandId="AnalyzerBasedOnAstTree.commands.sampleCommand"
                   icon="icons/sample.png"
-                  tooltip="Say hello world">
+                  tooltip="Run Analyzer">
             </command>
          </toolbar>
       </menuContribution>

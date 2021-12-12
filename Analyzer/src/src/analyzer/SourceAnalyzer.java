@@ -116,25 +116,6 @@ public class SourceAnalyzer {
 		System.out.println(" ----------------------------------------------\n");
 	}
 
-
-//	private void printIMethods(ICompilationUnit unit) throws JavaModelException {
-//
-//		IType[] allTypes = unit.getAllTypes();
-//		for (IType type : allTypes) {
-//			printIMethodDetails(type);
-//		}
-//	}
-
-//	private void printIMethodDetails(IType type) throws JavaModelException {
-//		IMethod[] methods = type.getMethods();
-//		for (IMethod method : methods) {
-//
-//			System.out.println("Method name " + method.getElementName());
-//			System.out.println("Signature " + method.getSignature());
-//			System.out.println("Return Type " + method.getReturnType());
-//
-//		}
-//	}
 	
 	public List<MethodDeclaration> getMethodDeclarationsOfClass(ICompilationUnit unit) {
 		
@@ -142,10 +123,6 @@ public class SourceAnalyzer {
 		CompilationUnit parse = parse(unit);
 		
 		methodDeclarations = MethodDeclarationFinder.perform(parse);
-
-		for (MethodDeclaration method : methodDeclarations) {
-			System.out.print("Method elements: " + method.getBody().statements());
-		}
 		
 		return methodDeclarations;
 	}
@@ -160,11 +137,6 @@ public class SourceAnalyzer {
 		return (CompilationUnit) parser.createAST(null); // parse
 	}
 
-	public static List<MethodDeclaration> perform(ASTNode node) {
-		MethodDeclarationFinder finder = new MethodDeclarationFinder();
-		node.accept(finder);
-		return finder.getMethods();
-	}
 
 	public static final class MethodDeclarationFinder extends ASTVisitor {
 		private final List<MethodDeclaration> methods = new ArrayList<>();

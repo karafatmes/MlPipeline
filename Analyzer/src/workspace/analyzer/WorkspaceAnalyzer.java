@@ -8,7 +8,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 public class WorkspaceAnalyzer {
 	
 	
-	
 	public static IProject[] findProjectsInWorkspace() {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IWorkspaceRoot root = workspace.getRoot();

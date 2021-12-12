@@ -1,6 +1,6 @@
 package transformers;
 
-import stages.KeyType;
+import stages.MlLibType;
 import stages.Stage;
 
 public class StringIndexerTransformer {
@@ -9,6 +9,6 @@ public class StringIndexerTransformer {
 
 	public boolean isTransformer() {
 
-		return (stage.getType() == KeyType.StringIndexer) ? true : false;
+		return (stage.getType() == MlLibType.StringIndexer) ? true : false;
 	}
 }

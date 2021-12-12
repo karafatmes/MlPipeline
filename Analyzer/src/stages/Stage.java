@@ -2,7 +2,8 @@ package stages;
 
 public class Stage {
 
-	private KeyType type;
+	private MlLibType type;
+	private String name;
 	private String[] inputCols;
 	private String[] outputCols;
 
@@ -26,12 +27,21 @@ public class Stage {
 		this.outputCols = outputCols;
 	}
 
-	public KeyType getType() {
+	public MlLibType getType() {
 		return type;
 	}
 
-	public void setType(KeyType type) {
+	public void setType(MlLibType type) {
 		this.type = type;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 
 }

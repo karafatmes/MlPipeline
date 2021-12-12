@@ -1,6 +1,6 @@
 package transformers;
 
-import stages.KeyType;
+import stages.MlLibType;
 import stages.Stage;
 
 public class VectorAssemblerTransformer {
@@ -9,7 +9,7 @@ public class VectorAssemblerTransformer {
 
 	public boolean isTransformer() {
 
-		return (stage.getType() == KeyType.VectorAssembler) ? true : false;
+		return (stage.getType() == MlLibType.VectorAssembler) ? true : false;
 	}
 
 }

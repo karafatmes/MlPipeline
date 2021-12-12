@@ -1,6 +1,6 @@
 package transformers;
 
-import stages.KeyType;
+import stages.MlLibType;
 import stages.Stage;
 
 public class OneHotEncoderTransformer extends Transformer { 
@@ -9,7 +9,7 @@ public class OneHotEncoderTransformer extends Transformer {
 
 	public boolean isTransformer() {
 		
-		return (stage.getType() == KeyType.OneHotEncoder)? true:false; 
+		return (stage.getType() == MlLibType.OneHotEncoder)? true:false; 
 	}
 		
 }
