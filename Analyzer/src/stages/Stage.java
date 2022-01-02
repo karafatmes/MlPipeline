@@ -1,36 +1,44 @@
 package stages;
 
+import java.util.List;
+
 public class Stage {
 
 	private MlLibType type;
 	private String name;
-	private String[] inputCols;
-	private String[] outputCols;
+	private List<?> inputCols;
+	private List<?> outputCols;
 
 	public Stage() {
 
 	}
 
-	public String[] getInputCols() {
+
+	public List<?> getInputCols() {
 		return inputCols;
 	}
 
-	public void setInputCols(String[] inputCols) {
+
+	public void setInputCols(List<?> inputCols) {
 		this.inputCols = inputCols;
 	}
 
-	public String[] getOutputCols() {
+
+	public List<?> getOutputCols() {
 		return outputCols;
 	}
 
-	public void setOutputCols(String[] outputCols) {
+
+	public void setOutputCols(List<?> outputCols) {
 		this.outputCols = outputCols;
 	}
+
 
 	public MlLibType getType() {
 		return type;
 	}
 
+	
 	public void setType(MlLibType type) {
 		this.type = type;
 	}
@@ -42,6 +50,22 @@ public class Stage {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public Stage getStageByName(String name) {
+		return (this.name.equals(name)) ? this : null;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Stage [type=" + type + ", name=" + name + ", inputCols=" + inputCols + ", outputCols=" + outputCols
+				+ "]";
+	}
+
+
+	
+	
+	
 	
 
 }

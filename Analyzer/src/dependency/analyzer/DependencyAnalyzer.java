@@ -27,6 +27,7 @@ import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.StringLiteral;
 
 import src.analyzer.SourceAnalyzer.MethodDeclarationFinder;
 import stages.MlLibType;
@@ -54,14 +55,6 @@ public class DependencyAnalyzer {
 	 public void findMlLibDependencies(MethodDeclaration methodDeclaration) {
 		 List<VariableDeclarationStatement> variableStatements= findMllibStatementsInMethod(methodDeclaration);
 		 this.mlLibStatements.addAll(variableStatements);
-//		 for (VariableDeclarationStatement statement :  variableStatements) {
-//			 
-//			 if( ! isMlPipelineStage(statement.getType().toString())) {
-//				 // ignore statement if it is not MlPipeline Stage
-//				 continue;
-//			 }
-//			 analyzeStagesOfPipeline(statement, stagesOfPipeline);
-//		 }
 	 }
 	 
 	 
@@ -87,7 +80,6 @@ public class DependencyAnalyzer {
 			 }
 			 
 			 variableStatements.add(var);
-//			 System.out.println(" fragments are  "+ var.fragments() +"for type" + var.getType());
 		 }
 		 return variableStatements;
 	 }
@@ -105,43 +97,143 @@ public class DependencyAnalyzer {
 		 Stage stage = new Stage();
 		 stage.setName(fragment.getName().toString());
 		 stage.setType(getMlLibType(statement.getType().toString()));
-		 System.out.println(" variable statement  " + statement.fragments());
 		 
-		 // TODO init stages
+		 List<String> inputcols = new ArrayList<String>();
+		 List<String> outputcols = new ArrayList<String>();
+		 
 		if(fragment.getInitializer()!=null && fragment.getInitializer() instanceof MethodInvocation) {
 			MethodInvocation methodInvocation = (MethodInvocation) fragment.getInitializer();
-//			 System.out.println(" arguments are " + methodInvocation.arguments());
-//			 System.out.println(" name is  " + methodInvocation.getName());
 			 
-			 if(methodInvocation!=null && methodInvocation.getName()!=null) {
-			
-			 }
-			 
-			 if(methodInvocation.getExpression() instanceof MethodInvocation ) {
-				 MethodInvocation methodInvocationInside = (MethodInvocation)methodInvocation.getExpression();
-				 if (methodInvocationInside!=null) {
-//					 System.out.println(" arguments are " + methodInvocationInside.arguments());
-//					 System.out.println(" name is  " + methodInvocationInside.getName());
-				 }
-			 }
-			 else if (methodInvocation.getExpression() instanceof ClassInstanceCreation) {
-				 ClassInstanceCreation classInstanceCreation = (ClassInstanceCreation) methodInvocation.getExpression();
-				 if (classInstanceCreation!=null) {
-//					 System.out.println(" arguments are " + classInstanceCreation.arguments());
-				 }
-			 }
-	//		System.out.println(" fragment is " + fragment.getName());
-			 ChildPropertyDescriptor property = (ChildPropertyDescriptor)fragment.getNameProperty();
-	//		System.out.println(" fragment property is " + property.getId());
+			if (!stage.getType().label.equals(MlLibType.LogisticRegression.label)) {
+				
+				stage.setInputCols(findInputColsInStatement(methodInvocation));
+				stage.setOutputCols(findsOutputColsInStatement(methodInvocation));
+			}
+			else if (stage.getType().label.equals(MlLibType.LogisticRegression.label)) {
+				// in case of LogisticRegression we have setFeatures and setLabel as input and output method.
+				stage.setInputCols(findFeatureColsInStatement(methodInvocation));
+				stage.setOutputCols(findLabelColsInStatement(methodInvocation));
+			}
+			 	 
 		}
-		else if (fragment.getInitializer() instanceof ClassInstanceCreation) {
-			ClassInstanceCreation classInstanceCreation = (ClassInstanceCreation) fragment.getInitializer();
-//			 System.out.println(" arguments are " + classInstanceCreation.arguments());
-//			 System.out.println(" name is  " + classInstanceCreation.getName());
-		}
-			
-		
+		stagesOfPipeline.add(stage);
+		System.out.println(" stage is   " + stage.toString());
 	}
+	
+	private List<?> findInputColsInStatement(MethodInvocation methodInvocation)  {
+		// this method used to find setInputCol/s inside statement.
+		// return inputcols.
+		List<?> inputCols = null;
+		while(!(methodInvocation.getName().getIdentifier().equals("setInputCol") ||  
+				methodInvocation.getName().getIdentifier().equals("setInputCols"))) {
+			
+			if(methodInvocation.getExpression() instanceof ClassInstanceCreation) {
+				// when go to last sentence get out of loop
+				break;
+			}
+			
+			methodInvocation = (MethodInvocation)methodInvocation.getExpression();
+		}
+		 List<ArrayCreation> array = methodInvocation.arguments();
+		 if(array!=null && !array.isEmpty() && array.get(0) instanceof ArrayCreation)  {
+			//many arguments inside method
+			ArrayCreation  arrayElement = array.get(0);
+			ArrayInitializer arrayInitilizer = arrayElement.getInitializer();
+			inputCols =  arrayInitilizer.expressions();
+		}
+		else {
+			// only one argument inside method.
+			inputCols = methodInvocation.arguments();
+		}
+		return inputCols;
+	}
+	
+	private List<?> findsOutputColsInStatement(MethodInvocation methodInvocation) {
+		// this method used to find setOutputCol/s inside statement.
+		// return outputcols.
+		List<?> outputCols = null;
+		while(!(methodInvocation.getName().getIdentifier().equals("setOutputCol") ||  
+				methodInvocation.getName().getIdentifier().equals("setOutputCols"))) {
+			
+			if(methodInvocation.getExpression() instanceof ClassInstanceCreation) {
+				// when go to last sentence get out of loop
+				break;
+			}
+			
+			methodInvocation = (MethodInvocation)methodInvocation.getExpression();
+		}
+		List<ArrayCreation> array = methodInvocation.arguments();
+		if(array!=null && !array.isEmpty() && array.get(0) instanceof ArrayCreation)  {
+			//many arguments inside method
+			ArrayCreation  arrayElement = array.get(0);
+			ArrayInitializer arrayInitilizer = arrayElement.getInitializer();
+			outputCols =  arrayInitilizer.expressions();
+		}
+		else {
+			// only one argument inside method.
+			outputCols = methodInvocation.arguments();
+		}
+		return outputCols;
+	}
+	
+	
+	private List<?> findFeatureColsInStatement(MethodInvocation methodInvocation) {
+		// this method used to find setFeatureCol/s inside statement.
+		// return featurecols.
+		List<?> featureCols = null;
+		while(!(methodInvocation.getName().getIdentifier().equals("setFeaturesCol") ||  
+				methodInvocation.getName().getIdentifier().equals("setFeaturesCols"))) {
+			
+			if(methodInvocation.getExpression() instanceof ClassInstanceCreation) {
+				// when go to last sentence get out of loop
+				break;
+			}
+			
+			methodInvocation = (MethodInvocation)methodInvocation.getExpression();
+		}
+		List<ArrayCreation> array = methodInvocation.arguments();
+		if(array!=null && !array.isEmpty() && array.get(0) instanceof ArrayCreation)  {
+			//many arguments inside method
+			ArrayCreation  arrayElement = array.get(0);
+			ArrayInitializer arrayInitilizer = arrayElement.getInitializer();
+			featureCols =  arrayInitilizer.expressions();
+		}
+		else {
+			// only one argument inside method.
+			featureCols = methodInvocation.arguments();
+		}
+		return featureCols;
+	} 
+	
+	private List<?> findLabelColsInStatement(MethodInvocation methodInvocation) {
+		// this method used to find setLabelCol/s inside statement.
+		// return labelcols.
+		List<?> laeblCols = null;
+		while(!(methodInvocation.getName().getIdentifier().equals("setLabelCol") ||  
+				methodInvocation.getName().getIdentifier().equals("setLabelCols"))) {
+			
+			if(methodInvocation.getExpression() instanceof ClassInstanceCreation) {
+				// when go to last sentence get out of loop
+				break;
+			}
+			
+			methodInvocation = (MethodInvocation)methodInvocation.getExpression();
+		}
+		List<ArrayCreation> array = methodInvocation.arguments();
+		if(array!=null && !array.isEmpty() && array.get(0) instanceof ArrayCreation)  {
+			//many arguments inside method
+			ArrayCreation  arrayElement = array.get(0);
+			ArrayInitializer arrayInitilizer = arrayElement.getInitializer();
+			laeblCols =  arrayInitilizer.expressions();
+		}
+		else {
+			// only one argument inside method.
+			laeblCols = methodInvocation.arguments();
+		}
+		return laeblCols;
+	} 
+	
+	
 	
 	private List<SimpleName> findStagesOfPipeline(VariableDeclarationStatement statement) {
 		List<VariableDeclarationFragment> fragments = statement.fragments();
@@ -206,7 +298,14 @@ public class DependencyAnalyzer {
 	}
 
 
+	public List<Stage> getStagesOfPipeline() {
+		return stagesOfPipeline;
+	}
 
+
+	public void setStagesOfPipeline(List<Stage> stagesOfPipeline) {
+		this.stagesOfPipeline = stagesOfPipeline;
+	}
 
 
 	public static final class VariableDeclarationExpressionFinder extends ASTVisitor {

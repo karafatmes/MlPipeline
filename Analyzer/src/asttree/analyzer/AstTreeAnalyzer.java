@@ -20,6 +20,7 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 import dependency.analyzer.DependencyAnalyzer;
 import file.handler.FileHandler;
+import graph.GraphFactory;
 import project.analyzer.ProjectAnalyzer;
 import src.analyzer.SourceAnalyzer;
 import workspace.analyzer.WorkspaceAnalyzer;
@@ -66,10 +67,12 @@ public class AstTreeAnalyzer extends AbstractHandler {
 		List<VariableDeclarationStatement> mlLibStatements = dependencyAnalyzer.getMlLibStatements();
 
 		for (VariableDeclarationStatement statement : mlLibStatements) {
-			
+
 			dependencyAnalyzer.analyzeStagesOfPipeline(statement, dependencyAnalyzer.getNameOfStagesInPipeline());
-			
+
 		}
+
+		GraphFactory factory = new GraphFactory(dependencyAnalyzer.getStagesOfPipeline());
 		printFinishMessage();
 
 		return null;
