@@ -1,14 +1,16 @@
-package transformers;
+package estimators;
 
 import stages.MlLibType;
 import stages.Stage;
 
-public class StringIndexerTransformer {
+public class StringIndexerTransformer extends Estimator{
 
 	private Stage stage;
 
-	public boolean isTransformer() {
+	public boolean isEstimator() {
 
 		return (stage.getType() == MlLibType.StringIndexer) ? true : false;
 	}
+	
+	
 }

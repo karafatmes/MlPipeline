@@ -82,4 +82,14 @@ class Graph<T> {
 
 		return (builder.toString());
 	}
+
+	public Map<T, List<T>> getMap() {
+		return map;
+	}
+
+	public void setMap(Map<T, List<T>> map) {
+		this.map = map;
+	}
+	
+	
 }

@@ -1,6 +1,8 @@
 package transformers;
 
-public abstract class Transformer {
+import stages.Feature;
+
+public abstract class Transformer extends Feature{
 
 	public abstract boolean isTransformer();
 }

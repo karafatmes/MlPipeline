@@ -3,7 +3,7 @@ package transformers;
 import stages.MlLibType;
 import stages.Stage;
 
-public class VectorAssemblerTransformer {
+public class VectorAssemblerTransformer extends Transformer{
 	
 	private Stage stage;
 

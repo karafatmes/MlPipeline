@@ -14,6 +14,7 @@ import stages.Stage;
 
 public class GraphFactory {
 	
+	private Graph<Stage> g;
 
 	public GraphFactory(List<Stage> stages) {
 		buildGraph(stages);
@@ -22,7 +23,7 @@ public class GraphFactory {
 	
 	private void buildGraph(List<Stage> stages) {
 		// Object of graph is created.
-        Graph<Stage> g = new Graph<Stage>();
+        g = new Graph<Stage>();
 		for( Stage stage : stages) {
 			g.addVertex(stage);
 			if (stages.indexOf(stage) == stages.size()-1) {
@@ -35,6 +36,32 @@ public class GraphFactory {
 	}
 
 
+	public Graph<Stage> getGraph() {
+		return g;
+	}
+
+
+	public void setGraph(Graph<Stage> g) {
+		this.g = g;
+	}
+
+
+	public void lookInputsForEveryVertexInGraph() {
+		for( Stage v : g.getMap().keySet()) {
+			 List<? extends String> inputs = v.getInputCols();
+			 List<String> outputsFromPreviousStages = null;
+			 for(String input : inputs) {
+				 if(isInputComingFromOtherStage(input,outputsFromPreviousStages)) {
+					 // TODO keep only inputs comingFromFile
+					 // these inputs are the dependencies
+				 }
+			 }
+		}
+	}
+	
+	public boolean isInputComingFromOtherStage(String input, List<String> outputsFromPreviousStages) {
+		return (outputsFromPreviousStages.contains(input) ? true: false);
+	}
 	
 
 	

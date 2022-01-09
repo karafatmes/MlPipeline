@@ -6,30 +6,30 @@ public class Stage {
 
 	private MlLibType type;
 	private String name;
-	private List<?> inputCols;
-	private List<?> outputCols;
+	private List<? extends String> inputCols;
+	private List<? extends String> outputCols;
 
 	public Stage() {
 
 	}
 
 
-	public List<?> getInputCols() {
+	public List<? extends String> getInputCols() {
 		return inputCols;
 	}
 
 
-	public void setInputCols(List<?> inputCols) {
+	public void setInputCols(List<? extends String> inputCols) {
 		this.inputCols = inputCols;
 	}
 
 
-	public List<?> getOutputCols() {
+	public List<? extends String> getOutputCols() {
 		return outputCols;
 	}
 
 
-	public void setOutputCols(List<?> outputCols) {
+	public void setOutputCols(List<? extends String> outputCols) {
 		this.outputCols = outputCols;
 	}
 

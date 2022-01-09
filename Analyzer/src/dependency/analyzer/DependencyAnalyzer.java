@@ -120,10 +120,10 @@ public class DependencyAnalyzer {
 		System.out.println(" stage is   " + stage.toString());
 	}
 	
-	private List<?> findInputColsInStatement(MethodInvocation methodInvocation)  {
+	private List<? extends String> findInputColsInStatement(MethodInvocation methodInvocation)  {
 		// this method used to find setInputCol/s inside statement.
 		// return inputcols.
-		List<?> inputCols = null;
+		List<? extends String> inputCols = null;
 		while(!(methodInvocation.getName().getIdentifier().equals("setInputCol") ||  
 				methodInvocation.getName().getIdentifier().equals("setInputCols"))) {
 			
@@ -148,10 +148,10 @@ public class DependencyAnalyzer {
 		return inputCols;
 	}
 	
-	private List<?> findsOutputColsInStatement(MethodInvocation methodInvocation) {
+	private List<? extends String> findsOutputColsInStatement(MethodInvocation methodInvocation) {
 		// this method used to find setOutputCol/s inside statement.
 		// return outputcols.
-		List<?> outputCols = null;
+		List<? extends String> outputCols = null;
 		while(!(methodInvocation.getName().getIdentifier().equals("setOutputCol") ||  
 				methodInvocation.getName().getIdentifier().equals("setOutputCols"))) {
 			
@@ -177,10 +177,10 @@ public class DependencyAnalyzer {
 	}
 	
 	
-	private List<?> findFeatureColsInStatement(MethodInvocation methodInvocation) {
+	private List<? extends String> findFeatureColsInStatement(MethodInvocation methodInvocation) {
 		// this method used to find setFeatureCol/s inside statement.
 		// return featurecols.
-		List<?> featureCols = null;
+		List<? extends String> featureCols = null;
 		while(!(methodInvocation.getName().getIdentifier().equals("setFeaturesCol") ||  
 				methodInvocation.getName().getIdentifier().equals("setFeaturesCols"))) {
 			
@@ -205,10 +205,10 @@ public class DependencyAnalyzer {
 		return featureCols;
 	} 
 	
-	private List<?> findLabelColsInStatement(MethodInvocation methodInvocation) {
+	private List<? extends String> findLabelColsInStatement(MethodInvocation methodInvocation) {
 		// this method used to find setLabelCol/s inside statement.
 		// return labelcols.
-		List<?> laeblCols = null;
+		List<? extends String> laeblCols = null;
 		while(!(methodInvocation.getName().getIdentifier().equals("setLabelCol") ||  
 				methodInvocation.getName().getIdentifier().equals("setLabelCols"))) {
 			
