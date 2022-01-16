@@ -53,7 +53,9 @@ public class FileHandler {
 		do {
 			try {
 				content = (char)input.read();
-				builder.append(content);
+				if(content!='\n') {
+					builder.append(content);
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -19,6 +19,7 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 import dependency.analyzer.DependencyAnalyzer;
+import exporter.FileExporter;
 import file.handler.FileHandler;
 import graph.GraphFactory;
 import project.analyzer.ProjectAnalyzer;
@@ -71,8 +72,12 @@ public class AstTreeAnalyzer extends AbstractHandler {
 			dependencyAnalyzer.analyzeStagesOfPipeline(statement, dependencyAnalyzer.getNameOfStagesInPipeline());
 
 		}
+		FileExporter exporter = new FileExporter(dependencyAnalyzer.getStagesOfPipeline(), columnsInFilefile);
+		exporter.exportStagesToExternalFile();
 
-		GraphFactory factory = new GraphFactory(dependencyAnalyzer.getStagesOfPipeline());
+//		GraphFactory factory = new GraphFactory(dependencyAnalyzer.getStagesOfPipeline());
+		
+		
 		printFinishMessage();
 
 		return null;

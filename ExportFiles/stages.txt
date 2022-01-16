@@ -1,0 +1,9 @@
+columnsOfFile:[id, featurecol1, featurecol2, featurecol3]
+node1: VectorAssembler
+inputs for node1:["featurecol1", "featurecol2", "featurecol3"]
+outputs for node1:["features"]
+-------
+node2: StandardScaler
+inputs for node2:["features"]
+outputs for node2:["sfeatures"]
+-------
