@@ -25,16 +25,15 @@ public class PipelineOneHotCodeEncoder {
 	public static PipelineModel create_pipeline() {
 
 		// create first stage of pipeline
-		StringIndexer category1Indexer = new StringIndexer().setInputCol("category_1").setOutputCol("category_1_index");
-		// create second stage of pipeline
-		StringIndexer category2Indexer = new StringIndexer().setInputCol("category_2").setOutputCol("category_2_index");
+		StringIndexer category1Indexer = new StringIndexer().setInputCols(new String[] {"category_1","category_2"}).setOutputCols(
+				new String[] {"category_1_index","category_2_index"});
 		// create third stage of pipeline
 		OneHotEncoder oneHotEncoder = new OneHotEncoder().setInputCol("category_2_index")
 				.setOutputCol("category_2_OHE");
 
 		// setup the pipeline
 		Pipeline pipeline = new Pipeline()
-				.setStages(new PipelineStage[] { category1Indexer, category2Indexer, oneHotEncoder });
+				.setStages(new PipelineStage[] { category1Indexer, oneHotEncoder });
 
 		PipelineModel model = pipeline.fit(read_data_from_file());
 

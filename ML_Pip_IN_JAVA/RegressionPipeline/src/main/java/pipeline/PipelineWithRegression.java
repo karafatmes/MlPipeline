@@ -25,9 +25,7 @@ public class PipelineWithRegression {
 
 	public static PipelineModel create_pipeline() {
 		// create first stage of pipeline
-		StringIndexer feature2Indexer = new StringIndexer().setInputCol("feature_2").setOutputCol("feature_2_index");
-		// create second stage of pipeline
-		StringIndexer feature3Indexer = new StringIndexer().setInputCol("feature_3").setOutputCol("feature_3_index");
+		StringIndexer feature2Indexer = new StringIndexer().setInputCols( new String[] {"feature_2", "feature_3"}).setOutputCols( new String[] {"feature_2_index","feature_3_index"});
 		// create third stage of pipeline
 		OneHotEncoder oneHotEncoder = new OneHotEncoder()
 				.setInputCols(new String[] { "feature_2_index", "feature_3_index" })
@@ -41,7 +39,7 @@ public class PipelineWithRegression {
 				.setLabelCol("label");
 
 		// setup the pipeline
-		Pipeline pipeline = new Pipeline().setStages(new PipelineStage[] { feature2Indexer, feature3Indexer,
+		Pipeline pipeline = new Pipeline().setStages(new PipelineStage[] { feature2Indexer,
 				oneHotEncoder, vectorAssembler, logisticRegression });
 
 		PipelineModel model = pipeline.fit(read_data_from_file());
