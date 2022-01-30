@@ -25,6 +25,7 @@ public class FileExporter {
 	public void exportStagesToExternalFile() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("columnsOfFile:"+Arrays.toString(columnsOfFile)+ "\n");
+		builder.append("-------\n");
 		int i=1;
 		for (Stage stage : stages) {
 		

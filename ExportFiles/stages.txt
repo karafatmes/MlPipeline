@@ -1,9 +1,10 @@
-columnsOfFile:[id, category_1, category_2]
-node1: StringIndexer
-inputs for node1:["category_1", "category_2"]
-outputs for node1:["category_1_index", "category_2_index"]
+columnsOfFile:[id, featurecol1, featurecol2, featurecol3]
 -------
-node2: OneHotEncoder
-inputs for node2:["category_2_index"]
-outputs for node2:["category_2_OHE"]
+node1: VectorAssembler
+inputs for node1:["featurecol1", "featurecol2", "featurecol3"]
+outputs for node1:["features"]
+-------
+node2: StandardScaler
+inputs for node2:["features"]
+outputs for node2:["sfeatures"]
 -------
