@@ -2,8 +2,10 @@ package services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import entities.Column;
+import entities.Edge;
 import entities.Graph;
 import entities.NodeOfGraph;
 import javafx.scene.Node;
@@ -55,6 +57,7 @@ public class GraphCreator {
 										buildSingleDirectionalLine(start, end, pane, true, false, weight, isFile);
 										int startIndex = graph.getNodes().indexOf(startEdgeNode);
 										int endIndex = graph.getNodes().indexOf(endEdgeNode);
+										// TODO take care that we have duplicate edges
 										graph.addEdge(startIndex, endIndex, weight);
 									}
 								}
@@ -110,6 +113,50 @@ public class GraphCreator {
 	}
 	
 	
+	public List<NodeOfGraph> getNodesAfterTopologicalSorting() {
+		List<NodeOfGraph> topologicalList = new ArrayList<NodeOfGraph>();
+		
+		List<NodeOfGraph> nodesWithNoIncomingEdges = graph.getNodes().stream().filter(node -> node.getInputs().isEmpty()).collect(Collectors.toList());
+		
+		while(!nodesWithNoIncomingEdges.isEmpty()) {
+			NodeOfGraph node = nodesWithNoIncomingEdges.get(0);
+			
+			nodesWithNoIncomingEdges.remove(node);
+			System.out.println(" node is "+ node.getName());
+			topologicalList.add(node);
+			Edge edgeToRemove = null;
+			System.out.println("edge size is "+ graph.getEdges().size());
+			for (Edge e : graph.getEdges()) {
+				if(e.getStartIndex()==graph.getNodes().indexOf(node)) {
+					NodeOfGraph nodeM = graph.getNodes().get(e.getEndIndex());
+					System.out.println("edge is "+ e.getWeight());
+					String columnsToRemove[] = e.getWeight().replaceAll(" ","").split(",");
+					for (String columnToRemove : columnsToRemove) {
+						List<Column> columntToRemove = nodeM.getInputs().stream().filter(column -> column.getValue().equals(columnToRemove)).collect(Collectors.toList());
+						if(!columntToRemove.isEmpty()) {
+							
+							nodeM.getInputs().remove(columntToRemove.get(0));
+						}
+					}
+					edgeToRemove = e;
+					
+					if(nodeM.getInputs().isEmpty()) {
+						nodesWithNoIncomingEdges.add(nodeM);
+					}
+				}
+			}
+			if(edgeToRemove!=null) {
+				graph.getEdges().remove(edgeToRemove);
+			}
+			
+		}
+		if(graph.getEdges().size() >0) {
+			throw new IllegalStateException(" Graph has cycle dependency");
+		}
+		
+		
+		return topologicalList;
+	}
 
 
 }

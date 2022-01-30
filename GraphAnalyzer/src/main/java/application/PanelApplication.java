@@ -1,7 +1,10 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
+import entities.Edge;
 import entities.Graph;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -36,6 +39,9 @@ public class PanelApplication extends Application{
 		reader.fillGraphWithInfoComingFromFile();
 		pane.getChildren().addAll(addGraphToPanel(pane, graphCreator));
 		
+		// look if graph has cycle dependency.
+		graphCreator.getNodesAfterTopologicalSorting();
+		
 	}
 	
 	public ArrayList<StackPane> addGraphToPanel(Pane pane, GraphCreator graphCreator) {
@@ -43,8 +49,7 @@ public class PanelApplication extends Application{
 		// add nodes of Graph
 		ArrayList<StackPane> nodes = graphCreator.createNodesOfGraph();
 		for (int i = 0; i < graph.getNodes().size(); i++) {
-			String nodeName = graph.getNodes().get(i).getName();
-			// List<Edge> outputCols = graph.getNodes().get(i).getOutputs();
+			
 			for (int j = 0; j < graph.getNodes().size(); j++) {
 				if(i == j) {
 					// Dont look in the same graph if outputs contained in inputs of Node
@@ -54,8 +59,11 @@ public class PanelApplication extends Application{
 			}
 
 		}
+	    
 		return nodes;
 	}
+	
+	
 	
 	
 

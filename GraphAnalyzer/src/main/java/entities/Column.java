@@ -22,6 +22,13 @@ public class Column {
 	public void setValue(String value) {
 		this.value = value;
 	}
+	
+	public Column getByValue(String vallue) {
+		if(this.value.equals(value)) {
+			return this;
+		}
+		return null;
+	}
 
 
 }
