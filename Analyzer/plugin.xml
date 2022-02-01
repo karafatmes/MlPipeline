@@ -5,26 +5,26 @@
    <extension
          point="org.eclipse.ui.commands">
       <category
-            id="AnalyzerBasedOnAstTree.commands.category"
+            id="AstTreeParser.commands.category"
             name="Sample Category">
       </category>
       <command
-            categoryId="AnalyzerBasedOnAstTree.commands.category"
+            categoryId="AstTreeParser.commands.category"
             name="Sample Command"
-            id="AnalyzerBasedOnAstTree.commands.sampleCommand">
+            id="AstTreeParser.commands.sampleCommand">
       </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="asttree.analyzer.AstTreeAnalyzer"
-            commandId="AnalyzerBasedOnAstTree.commands.sampleCommand">
+            class="application.MainApplication"
+            commandId="AstTreeParser.commands.sampleCommand">
       </handler>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
       <key
-            commandId="AnalyzerBasedOnAstTree.commands.sampleCommand"
+            commandId="AstTreeParser.commands.sampleCommand"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             contextId="org.eclipse.ui.contexts.window"
             sequence="M1+6">
@@ -35,12 +35,12 @@
       <menuContribution
             locationURI="menu:org.eclipse.ui.main.menu?after=additions">
          <menu
-               id="AnalyzerBasedOnAstTree.menus.sampleMenu"
+               id="AstTreeParser.menus.sampleMenu"
                label="Sample Menu"
                mnemonic="M">
             <command
-                  commandId="AnalyzerBasedOnAstTree.commands.sampleCommand"
-                  id="AnalyzerBasedOnAstTree.menus.sampleCommand"
+                  commandId="AstTreeParser.commands.sampleCommand"
+                  id="AstTreeParser.menus.sampleCommand"
                   mnemonic="S">
             </command>
          </menu>
@@ -48,10 +48,10 @@
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
          <toolbar
-               id="AnalyzerBasedOnAstTree.toolbars.sampleToolbar">
+               id="AstTreeParser.toolbars.sampleToolbar">
             <command
-                  id="AnalyzerBasedOnAstTree.toolbars.sampleCommand"
-                  commandId="AnalyzerBasedOnAstTree.commands.sampleCommand"
+                  id="AstTreeParser.toolbars.sampleCommand"
+                  commandId="AstTreeParser.commands.sampleCommand"
                   icon="icons/sample.png"
                   tooltip="Run Analyzer">
             </command>

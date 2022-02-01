@@ -1,32 +1,27 @@
-package asttree.analyzer;
+package application;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.internal.resources.File;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
-import dependency.analyzer.DependencyAnalyzer;
-import exporter.FileExporter;
-import file.handler.FileHandler;
-import graph.GraphFactory;
-import project.analyzer.ProjectAnalyzer;
-import src.analyzer.SourceAnalyzer;
-import workspace.analyzer.WorkspaceAnalyzer;
 
-public class AstTreeAnalyzer extends AbstractHandler {
+import services.DependencyAnalyzer;
+import services.FileExporter;
+import services.FileHandler;
+import services.ProjectAnalyzer;
+import services.SourceAnalyzer;
+import services.WorkspaceAnalyzer;
+
+public class MainApplication extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>AnalyzerBasedOnAstTree</name>
+	<name>AstTreeParser</name>
 	<comment></comment>
 	<projects>
 	</projects>
