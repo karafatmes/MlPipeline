@@ -14,16 +14,17 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Line;
 
-public class GraphCreator {
+public class GraphCreator  implements Cloneable  {
 	
-	private static Graph graph;
+	private  Graph graph;
 	
 	public GraphCreator() {
 		 graph = new Graph();
 	}
 	
 	
-	public void createEdgesOfGraph(ArrayList<StackPane> nodes, NodeOfGraph startEdgeNode, NodeOfGraph endEdgeNode, Pane pane) {
+	
+	public void createEdgesOfGraph(ArrayList<StackPane> nodes, NodeOfGraph startEdgeNode, NodeOfGraph endEdgeNode, Pane pane, boolean designLines) {
 		StackPane start = null;
 		StackPane end = null;
 		boolean isFile = false;
@@ -54,10 +55,11 @@ public class GraphCreator {
 										end = (StackPane) n;
 									}
 									if (start != null & end != null) {
-										buildSingleDirectionalLine(start, end, pane, true, false, weight, isFile);
+										if(designLines) {
+											buildSingleDirectionalLine(start, end, pane, true, false, weight, isFile);
+										}
 										int startIndex = graph.getNodes().indexOf(startEdgeNode);
 										int endIndex = graph.getNodes().indexOf(endEdgeNode);
-										// TODO take care that we have duplicate edges
 										graph.addEdge(startIndex, endIndex, weight);
 									}
 								}
@@ -77,6 +79,7 @@ public class GraphCreator {
 		}
 		return nodes;
 	}
+	
 
 	
 	private String removeComma(String weight) {
@@ -108,11 +111,19 @@ public class GraphCreator {
 	}
 
 
-	public static Graph getGraph() {
+	public  Graph getGraph() {
 		return graph;
 	}
 	
 	
+	
+	
+	public void setGraph(Graph graph) {
+		this.graph = graph;
+	}
+
+
+
 	public List<NodeOfGraph> getNodesAfterTopologicalSorting() {
 		List<NodeOfGraph> topologicalList = new ArrayList<NodeOfGraph>();
 		
@@ -122,7 +133,7 @@ public class GraphCreator {
 			NodeOfGraph node = nodesWithNoIncomingEdges.get(0);
 			
 			nodesWithNoIncomingEdges.remove(node);
-			System.out.println(" node is "+ node.getName());
+			System.out.println(" node is "+ node.getName()+node.getValue());
 			topologicalList.add(node);
 			Edge edgeToRemove = null;
 			System.out.println("edge size is "+ graph.getEdges().size());

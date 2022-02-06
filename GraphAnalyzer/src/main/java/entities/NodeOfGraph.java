@@ -41,6 +41,7 @@ public class NodeOfGraph {
 	public List<Column> getOutputs() {
 		return outputs;
 	}
+	
 
 	public void setOutputs(List<Column> outputs) {
 		this.outputs = outputs;
