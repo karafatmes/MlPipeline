@@ -136,8 +136,9 @@ public class GraphCreator  implements Cloneable  {
 			
 			topologicalList.add(node);
 			Edge edgeToRemove = null;
-			
+			List<Edge> edgesToBeRemoved = new ArrayList<Edge>();
 			for (Edge e : graph.getEdges()) {
+				
 				if(e.getStartIndex()==graph.getNodes().indexOf(node)) {
 					NodeOfGraph nodeM = graph.getNodes().get(e.getEndIndex());
 					
@@ -150,14 +151,15 @@ public class GraphCreator  implements Cloneable  {
 						}
 					}
 					edgeToRemove = e;
-					
+					edgesToBeRemoved.add(edgeToRemove);
 					if(nodeM.getInputs().isEmpty()) {
 						nodesWithNoIncomingEdges.add(nodeM);
 					}
 				}
 			}
-			if(edgeToRemove!=null) {
-				graph.getEdges().remove(edgeToRemove);
+			if(!edgesToBeRemoved.isEmpty()) {
+				graph.getEdges().removeAll(edgesToBeRemoved);
+				edgesToBeRemoved.clear();
 			}
 			
 		}
