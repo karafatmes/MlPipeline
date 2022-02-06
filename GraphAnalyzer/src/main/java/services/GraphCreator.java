@@ -34,7 +34,7 @@ public class GraphCreator  implements Cloneable  {
 				weight = weight + outputCol.getValue() + " ,";
 			}
 		}
-		weight = removeComma(weight);
+		weight = removeLastComma(weight);
 		if (!weight.equals("")) {
 			// there is edge between nodes.
 						for (Node n : nodes) {
@@ -82,14 +82,14 @@ public class GraphCreator  implements Cloneable  {
 	
 
 	
-	private String removeComma(String weight) {
+	public String removeLastComma(String weight) {
 		if (weight != null && weight.length() > 0 && weight.charAt(weight.length() - 1) == ',') {
 			weight = weight.substring(0, weight.length() - 1);
 		}
 		return weight;
 	}
 	
-	private static boolean isContainedInNodeAsInput(List<Column> inputs, String outputCol) {
+	public static boolean isContainedInNodeAsInput(List<Column> inputs, String outputCol) {
 		return inputs.stream().anyMatch(input -> input.getValue().equals(outputCol));
 	}
 	
@@ -133,14 +133,14 @@ public class GraphCreator  implements Cloneable  {
 			NodeOfGraph node = nodesWithNoIncomingEdges.get(0);
 			
 			nodesWithNoIncomingEdges.remove(node);
-			System.out.println(" node is "+ node.getName()+node.getValue());
+			
 			topologicalList.add(node);
 			Edge edgeToRemove = null;
-			System.out.println("edge size is "+ graph.getEdges().size());
+			
 			for (Edge e : graph.getEdges()) {
 				if(e.getStartIndex()==graph.getNodes().indexOf(node)) {
 					NodeOfGraph nodeM = graph.getNodes().get(e.getEndIndex());
-					System.out.println("edge is "+ e.getWeight());
+					
 					String columnsToRemove[] = e.getWeight().replaceAll(" ","").split(",");
 					for (String columnToRemove : columnsToRemove) {
 						List<Column> columntToRemove = nodeM.getInputs().stream().filter(column -> column.getValue().equals(columnToRemove)).collect(Collectors.toList());

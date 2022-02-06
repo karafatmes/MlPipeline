@@ -1,0 +1,13 @@
+GraphAnalyzer is a maven project.
+
+Contains javafx, jgrapht libraries
+
+Inside src is the source code of project.
+
+To run the project right click in the root project
+
+	Run As -> Run Configurations 
+	
+	Maven goal -> clean javafx:run
+	
+	
