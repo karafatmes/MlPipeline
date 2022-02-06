@@ -1,0 +1,17 @@
+Plugin project
+
+Right click in the root of project
+
+
+Run As -> Eclipse Application
+
+
+New eclipse window is created.
+
+Ml Pipeline projects need to be loaded in the run-time application
+
+Click on the purple button (Run Analyzer).
+
+Choose the ml pipeline project has been loaded to analyze.
+
+Results are written in file (stages.txt) inside ExportFiles folder.

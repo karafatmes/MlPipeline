@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 class tests {
 
+	// Define tests of AstTreeParser
 	@Test
 	void test() {
 		assertEquals(2, calculator(1, 1));
