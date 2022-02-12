@@ -3,7 +3,9 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -19,6 +21,9 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
+
+import pipeline.Pipeline;
+
 import org.eclipse.jdt.core.dom.Statement;
 
 import stages.MlLibType;
@@ -32,14 +37,16 @@ import stages.Stage;
 public class DependencyAnalyzer {
 	
 	private List<MethodDeclaration> methodDeclarations;
-	private List<SimpleName> nameOfStagesInPipeline;
+	private Map<String, List<SimpleName>> nameOfStagesInPipeline;
 	private List<VariableDeclarationStatement> mlLibStatements;
-	private List<Stage> stagesOfPipeline;
+	private List<Pipeline> pipelines;
+	private int numberOfPipelines = 0;
 	
 	public DependencyAnalyzer(List<MethodDeclaration> methodDeclarations) {
 		this.methodDeclarations = methodDeclarations;
 		this.mlLibStatements = new ArrayList<VariableDeclarationStatement>();
-		this.stagesOfPipeline = new ArrayList<Stage>();
+		this.pipelines = new ArrayList<Pipeline>();
+		this.nameOfStagesInPipeline = new HashMap<String, List<SimpleName>>();
 	}
 	
 	
@@ -67,7 +74,11 @@ public class DependencyAnalyzer {
 			 
 			 if( var.getType()!=null && var.getType().toString().equals(MlLibType.Pipeline.label)) {
 				 // statement Pipeline contains stages.
-				 this.nameOfStagesInPipeline = findStagesOfPipeline(var);
+				 Pipeline pipeline = new Pipeline();
+				 pipeline.setName("pipeline"+numberOfPipelines);
+				 pipelines.add(pipeline);
+				 numberOfPipelines++;
+				 this.nameOfStagesInPipeline.put(pipeline.getName() ,findStagesOfPipeline(var));
 			 }
 			 
 			 variableStatements.add(var);
@@ -76,11 +87,11 @@ public class DependencyAnalyzer {
 	 }
 		 
 		 
-	public void analyzeStagesOfPipeline(VariableDeclarationStatement statement, List<SimpleName> stages)	 {
+	public void analyzeStagesOfPipeline(VariableDeclarationStatement statement, List<SimpleName> stages, String pipelineName)	 {
 		List<VariableDeclarationFragment> fragments = statement.fragments();
 		VariableDeclarationFragment fragment = fragments.get(0);
 		
-		 if (fragment!=null && !isMlPipelineStage(fragment.getName().toString())) {
+		 if (fragment!=null && !isMlPipelineStage(fragment.getName().toString(), pipelineName)) {
 				// ignore statement if it is not MlPipeline Stage
 				return;
 			}
@@ -107,7 +118,11 @@ public class DependencyAnalyzer {
 			}
 			 	 
 		}
-		stagesOfPipeline.add(stage);
+		for(Pipeline pipeline : this.getPipelines()) {
+			if(pipeline.getName().equals(pipelineName)) {
+				pipeline.getStages().add(stage);
+			}
+		}
 		System.out.println(" stage is   " + stage.toString());
 	}
 	
@@ -245,8 +260,8 @@ public class DependencyAnalyzer {
 	}
 	
 	
-	private  boolean isMlPipelineStage(String type) {
-	    for (SimpleName stage : this.getNameOfStagesInPipeline()) {
+	private  boolean isMlPipelineStage(String type, String pipelineName) {
+	    for (SimpleName stage : this.getNameOfStagesInPipeline().get(pipelineName)) {
 	        if (stage.getIdentifier().equals(type)) {
 	            return true;
 	        }
@@ -269,12 +284,12 @@ public class DependencyAnalyzer {
 		}
 
 
-	public List<SimpleName> getNameOfStagesInPipeline() {
+	public Map<String, List<SimpleName>> getNameOfStagesInPipeline() {
 		return nameOfStagesInPipeline;
 	}
 
 
-	public void setNameOfStagesInPipeline(List<SimpleName> nameOfStagesInPipeline) {
+	public void setNameOfStagesInPipeline(Map<String, List<SimpleName>> nameOfStagesInPipeline) {
 		this.nameOfStagesInPipeline = nameOfStagesInPipeline;
 	}
 
@@ -287,16 +302,18 @@ public class DependencyAnalyzer {
 	public void setMlLibStatements(List<VariableDeclarationStatement> mlLibStatements) {
 		this.mlLibStatements = mlLibStatements;
 	}
+	
 
-
-	public List<Stage> getStagesOfPipeline() {
-		return stagesOfPipeline;
+	public List<Pipeline> getPipelines() {
+		return pipelines;
 	}
 
 
-	public void setStagesOfPipeline(List<Stage> stagesOfPipeline) {
-		this.stagesOfPipeline = stagesOfPipeline;
+	public void setPipelines(List<Pipeline> pipelines) {
+		this.pipelines = pipelines;
 	}
+
+
 
 
 	public static final class VariableDeclarationExpressionFinder extends ASTVisitor {

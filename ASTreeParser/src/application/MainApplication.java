@@ -13,7 +13,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
-
+import pipeline.Pipeline;
 import services.DependencyAnalyzer;
 import services.FileExporter;
 import services.FileHandler;
@@ -48,7 +48,7 @@ public class MainApplication extends AbstractHandler {
 		SourceAnalyzer sourceAnalyzer = new SourceAnalyzer(javaProject);
 		// print classes of project included in source package.
 
-		sourceAnalyzer.printClassesIncludedInSourcePackages();
+//		sourceAnalyzer.printClassesIncludedInSourcePackages();
 
 		List<MethodDeclaration> allMethodDeclarations = new ArrayList<MethodDeclaration>();
 		for (ICompilationUnit unit : sourceAnalyzer.getCompilationUnits()) {
@@ -57,17 +57,20 @@ public class MainApplication extends AbstractHandler {
 		}
 
 		DependencyAnalyzer dependencyAnalyzer = new DependencyAnalyzer(allMethodDeclarations);
-		for (MethodDeclaration decl : allMethodDeclarations) {
+		for (MethodDeclaration decl : allMethodDeclarations) {          
 			dependencyAnalyzer.findMlLibDependencies(decl);
 		}
 		List<VariableDeclarationStatement> mlLibStatements = dependencyAnalyzer.getMlLibStatements();
+		
+		for( Pipeline pipeline : dependencyAnalyzer.getPipelines()) {
 
-		for (VariableDeclarationStatement statement : mlLibStatements) {
-
-			dependencyAnalyzer.analyzeStagesOfPipeline(statement, dependencyAnalyzer.getNameOfStagesInPipeline());
-
+			for (VariableDeclarationStatement statement : mlLibStatements) {
+	
+				dependencyAnalyzer.analyzeStagesOfPipeline(statement, dependencyAnalyzer.getNameOfStagesInPipeline().get(pipeline.getName()), pipeline.getName() );
+	
+			}
 		}
-		FileExporter exporter = new FileExporter(dependencyAnalyzer.getStagesOfPipeline(), columnsInFilefile);
+		FileExporter exporter = new FileExporter(dependencyAnalyzer.getPipelines(), columnsInFilefile);
 		exporter.exportStagesToExternalFile();
 
 //		GraphFactory factory = new GraphFactory(dependencyAnalyzer.getStagesOfPipeline());

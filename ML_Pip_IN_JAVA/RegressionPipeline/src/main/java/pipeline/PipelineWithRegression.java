@@ -53,6 +53,7 @@ public class PipelineWithRegression {
 		
 		Dataset<Row> dataSet = createSession().read().format("csv").option("header","true").option("inferSchema", "true").load("./src/main/resources/file.txt");
 		dataSet.show();
+		
 		dataSet.printSchema();
 		return dataSet;
 	}

@@ -40,9 +40,11 @@ public class PipelineWithMixedScaler {
 
 		Dataset<Row> dataSet = createSession().read().format("csv").option("header", "true")
 				.option("inferSchema", "true").load("./src/main/resources/file.txt");
-		dataSet.show();
-		dataSet.printSchema();
-		return dataSet;
+		String [] columnsExcluded = {"feature_1","feature_2","feature_3","feature_4","label"};
+		Dataset<Row> newdataSet = dataSet.drop(columnsExcluded);
+		newdataSet.show();
+		newdataSet.printSchema();
+		return newdataSet;
 	}
 
 	public static SparkSession createSession() {

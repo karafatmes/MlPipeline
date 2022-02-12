@@ -134,7 +134,7 @@ public class UiElementsCreator {
 	
 	
 	public static StackPane createDot(String color, String text) {
-		double radius = 100;
+		double radius = 50;
 		double paneSize = 5 * radius;
 		StackPane dotPane = new StackPane();
 		Circle dot = new Circle();
@@ -142,7 +142,7 @@ public class UiElementsCreator {
 		dot.setStyle("-fx-fill:" + color + ";-fx-stroke-width:2px;-fx-stroke:black;");
 
 		Label txt = new Label(text);
-		txt.setStyle("-fx-font-size:18px;-fx-font-weight:bold;");
+		txt.setStyle("-fx-font-size:8px;-fx-font-weight:bold;");
 		dotPane.getChildren().addAll(dot, txt);
 		dotPane.setPrefSize(paneSize, paneSize);
 		dotPane.setMaxSize(paneSize, paneSize);

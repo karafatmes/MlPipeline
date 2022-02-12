@@ -1,4 +1,4 @@
-id,featurecol1,featurecol2,featurecol3
-1,10.0,10000.0,1.0
-2,20.0,30000.0,2.0
-3,30.0,40000.0,3.0
+id,featurecol1,featurecol2,featurecol3,feature_1,feature_2,feature_3,feature_4,label
+1,10.0,10000.0,1.0,2.0,'A',"S10",40,1.0
+2,20.0,30000.0,2.0,1.0,'X',"E10",25,1.0
+3,30.0,40000.0,3.0,4.0,'X',"S20",10,0.0
