@@ -1,12 +1,30 @@
-columnsOfFile:[id, featurecol1, featurecol2, featurecol3]
+columnsOfFile:[id, featurecol1, featurecol2, featurecol3, feature_1, feature_2, feature_3, feature_4, label]
 -------
 ------start of pipeline0-----
 node1: VectorAssembler
 inputs for node1:["featurecol1", "featurecol2", "featurecol3"]
 outputs for node1:["features"]
 -------
-node2: StandardScaler
+node2: MinMaxScaler
 inputs for node2:["features"]
 outputs for node2:["sfeatures"]
 -------
 ------end of pipeline0-----
+------start of pipeline1-----
+node1: StringIndexer
+inputs for node1:["feature_2", "feature_3"]
+outputs for node1:["feature_2_index", "feature_3_index"]
+-------
+node2: OneHotEncoder
+inputs for node2:["feature_2_index", "feature_3_index"]
+outputs for node2:["feature_2_encoded", "feature_3_encoded"]
+-------
+node3: VectorAssembler
+inputs for node3:["feature_1", "feature_2_encoded", "feature_3_encoded", "feature_4"]
+outputs for node3:["features"]
+-------
+node4: LogisticRegression
+inputs for node4:["features"]
+outputs for node4:["label"]
+-------
+------end of pipeline1-----

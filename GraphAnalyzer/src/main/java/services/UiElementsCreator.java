@@ -1,11 +1,15 @@
 package services;
 
+
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.DoubleBinding;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -133,13 +137,20 @@ public class UiElementsCreator {
 	
 	
 	
-	public static StackPane createDot(String color, String text) {
+	public static StackPane createDot(String color, String text, String stageName ,String differenceOfColor) {
 		double radius = 50;
 		double paneSize = 5 * radius;
 		StackPane dotPane = new StackPane();
 		Circle dot = new Circle();
 		dot.setRadius(radius);
-		dot.setStyle("-fx-fill:" + color + ";-fx-stroke-width:2px;-fx-stroke:black;");
+		if(color!=null) {
+			dot.setStyle("-fx-fill:" + color + ";-fx-stroke-width:2px;-fx-stroke:black;");
+		}else {
+			dot.setStyle("-fx-fill:" + "rgb(0,"+differenceOfColor+",0)" + ";-fx-stroke-width:2px;-fx-stroke:black;");
+		}
+		
+		Tooltip t = new Tooltip(stageName);
+		Tooltip.install(dotPane, t);
 
 		Label txt = new Label(text);
 		txt.setStyle("-fx-font-size:8px;-fx-font-weight:bold;");
@@ -192,6 +203,7 @@ public class UiElementsCreator {
 			} else {
 				dotPane.setTranslateY(parentBounds.getHeight() - currPaneLayoutY - currPaneHeight);
 			}
+			t.hide();
 		};
 		dotPane.setOnMouseDragged(dotOnMouseDraggedEventHandler);
 		dotPane.setOnMouseReleased(e -> {
@@ -202,7 +214,18 @@ public class UiElementsCreator {
 			// Resetting the translate positions
 			dotPane.setTranslateX(0);
 			dotPane.setTranslateY(0);
+			t.hide();
 		});
+		dotPane.hoverProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+            	
+            	 
+            	 t.show(dotPane, dotPane.getLayoutX(), dotPane.getLayoutY());
+            }
+        });
+		
 		return dotPane;
 	}
 	

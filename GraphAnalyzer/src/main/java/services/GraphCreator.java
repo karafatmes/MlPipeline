@@ -70,12 +70,27 @@ public class GraphCreator  implements Cloneable  {
 	
 	
 	public  ArrayList<StackPane> createNodesOfGraph() {
+		String differenceOfColor ="";
 		ArrayList<StackPane> nodes = new ArrayList<StackPane>();
 		for (NodeOfGraph node : graph.getNodes()) {
-
-			StackPane dotA = UiElementsCreator.createDot("green", node.getName()+" : "+node.getPipelineBelongs());
-			dotA.setUserData(node.getValue());
-			nodes.add(dotA);
+			
+			// every pipeline will have different color. 
+			// so node belongs to specific pipeline will have distinct color.
+			int colorNumber = 158;
+			if(node.getName().equals("node0")) {
+				StackPane dotA = UiElementsCreator.createDot("yellow", node.getName()+" : "+node.getPipelineBelongs(), node.getValue(),null);
+				dotA.setUserData(node.getValue());
+				nodes.add(dotA);
+			}
+			else {
+				int differenceBasedOnPipeline = Integer.parseInt(node.getPipelineBelongs().substring(8));
+				differenceOfColor = (colorNumber - differenceBasedOnPipeline*10)+"";
+				System.out.println(" differenceColor is "+differenceOfColor);
+				StackPane dotA = UiElementsCreator.createDot(null, node.getName()+" : "+node.getPipelineBelongs(),node.getValue(),differenceOfColor);
+				dotA.setUserData(node.getValue());
+				nodes.add(dotA);
+			}
+			
 		}
 		return nodes;
 	}

@@ -104,6 +104,7 @@ public class PanelApplication extends Application{
 			}
 		}
 		// add edges between external source and other nodes.
+		// check here if column is missing from dataframe.
 		for (NodeOfGraph node : graph.getNodes()) {
 			NodeOfGraph nodeExternalSource = graph.getNodes().get(0);
 			graphCreator.createEdgesOfGraph(nodes, nodeExternalSource, node, pane, designLines);

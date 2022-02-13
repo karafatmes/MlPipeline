@@ -47,9 +47,9 @@ public class FileReader {
 					String[] outputColumnsOfNode0 = data.substring(data.indexOf("[") + 1, data.indexOf("]"))
 							.replace("\"", "").replaceAll(" ", "").split(",");
 
-					node = new NodeOfGraph("node0", "file");
-					node.setPipelineBelongs("pipeline");
-					pipelines.add("pipeline");
+					node = new NodeOfGraph("node0", "dataframe");
+					node.setPipelineBelongs("dataframe");
+					pipelines.add("dataframe");
 					for (String value : outputColumnsOfNode0) {
 						Column outputColumn = new Column(value);
 						node.getOutputs().add(outputColumn);
