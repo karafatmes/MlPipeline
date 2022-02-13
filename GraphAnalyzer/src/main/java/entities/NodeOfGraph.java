@@ -9,6 +9,7 @@ public class NodeOfGraph {
 	private String value;
 	private List<Column> inputs;
 	private List<Column> outputs;
+	private String pipelineBelongs;
 	
 	public NodeOfGraph() {
 		this.inputs = new ArrayList<Column>();
@@ -53,6 +54,14 @@ public class NodeOfGraph {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	public String getPipelineBelongs() {
+		return pipelineBelongs;
+	}
+
+	public void setPipelineBelongs(String pipelineBelongs) {
+		this.pipelineBelongs = pipelineBelongs;
 	}
 	
 	

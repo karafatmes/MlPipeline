@@ -41,7 +41,7 @@ public class GraphCreator  implements Cloneable  {
 							for (Node element : ((StackPane) n).getChildren()) {
 								if (element instanceof Label) {
 									String text = ((Label) element).getText();
-									if (text.equals(startEdgeNode.getName() +" : "+ startEdgeNode.getValue())) {
+									if (text.equals(startEdgeNode.getName() +" : "+ startEdgeNode.getPipelineBelongs())) {
 										// node starts edge
 										if( startEdgeNode.getName().equals("node0")) {
 											isFile = true;
@@ -50,7 +50,7 @@ public class GraphCreator  implements Cloneable  {
 											isFile = false;
 										}
 										start = (StackPane) n;
-									} else if (text.equals(endEdgeNode.getName() + " : "+ endEdgeNode.getValue())) {
+									} else if (text.equals(endEdgeNode.getName() + " : "+ endEdgeNode.getPipelineBelongs())) {
 										// node ends edge
 										end = (StackPane) n;
 									}
@@ -73,9 +73,9 @@ public class GraphCreator  implements Cloneable  {
 		ArrayList<StackPane> nodes = new ArrayList<StackPane>();
 		for (NodeOfGraph node : graph.getNodes()) {
 
-			StackPane dotA = UiElementsCreator.createDot("green", node.getName()+" : "+node.getValue());
+			StackPane dotA = UiElementsCreator.createDot("green", node.getName()+" : "+node.getPipelineBelongs());
+			dotA.setUserData(node.getValue());
 			nodes.add(dotA);
-
 		}
 		return nodes;
 	}

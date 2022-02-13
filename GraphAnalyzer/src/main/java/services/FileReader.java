@@ -2,6 +2,7 @@ package services;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import entities.Column;
 import entities.Graph;
@@ -15,10 +16,14 @@ public class FileReader {
 
 	private static String path;
 	private static Graph graph;
+	private static String pipelineName;
+	private static ArrayList<String> pipelines;
 
 	public FileReader(String path, Graph graph) {
 		this.graph = graph;
 		this.path = path;
+		pipelines = new ArrayList<String>();
+	
 	}
 
 	public static void fillGraphWithInfoComingFromFile() {
@@ -43,11 +48,18 @@ public class FileReader {
 							.replace("\"", "").replaceAll(" ", "").split(",");
 
 					node = new NodeOfGraph("node0", "file");
+					node.setPipelineBelongs("pipeline");
+					pipelines.add("pipeline");
 					for (String value : outputColumnsOfNode0) {
 						Column outputColumn = new Column(value);
 						node.getOutputs().add(outputColumn);
 					}
-
+				
+				} else if (data.startsWith("------start of")) {
+					// new pipeline starts
+					pipelineName = data.substring(data.indexOf("of ")+3, data.length() - 5);
+					pipelines.add(pipelineName);
+					
 				} else if (data.startsWith("node")) {
 					// start of node
 					String nodeName = data.substring(data.indexOf("node"), data.indexOf(":"));
@@ -55,6 +67,7 @@ public class FileReader {
 
 					node.setName(nodeName);
 					node.setValue(vertex);
+					node.setPipelineBelongs(pipelineName);
 
 				} else if (data.startsWith("inputs")) {
 					// inputs of node
@@ -84,6 +97,7 @@ public class FileReader {
 					graph.getNodes().add(node);
 					node = new NodeOfGraph();
 				}
+				
 			}
 			myReader.close();
 		} catch (FileNotFoundException e) {
@@ -107,5 +121,14 @@ public class FileReader {
 	public void setGraph(Graph graph) {
 		this.graph = graph;
 	}
+
+	public ArrayList<String> getPipelines() {
+		return pipelines;
+	}
+
+	public void setPipelines(ArrayList<String> pipelines) {
+		this.pipelines = pipelines;
+	}
+	
 
 }
