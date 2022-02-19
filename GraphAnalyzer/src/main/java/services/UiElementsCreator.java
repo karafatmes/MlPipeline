@@ -8,6 +8,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
@@ -32,6 +33,37 @@ public class UiElementsCreator {
 		txt.setStyle("-fx-font-size:8px;-fx-font-weight:bold;");
 		txt.setTextFill(Color.color(1, 1, 1));
 		weight.getChildren().add(txt);
+
+		DoubleBinding wgtSqrHalfWidth = weight.widthProperty().divide(2);
+		DoubleBinding wgtSqrHalfHeight = weight.heightProperty().divide(2);
+		DoubleBinding lineXHalfLength = line.endXProperty().subtract(line.startXProperty()).divide(2);
+		DoubleBinding lineYHalfLength = line.endYProperty().subtract(line.startYProperty()).divide(2);
+
+		weight.layoutXProperty().bind(line.startXProperty().add(lineXHalfLength.subtract(wgtSqrHalfWidth)));
+		weight.layoutYProperty().bind(line.startYProperty().add(lineYHalfLength.subtract(wgtSqrHalfHeight)));
+		return weight;
+	}
+	
+	public static StackPane createWeightWithMissingDependency(Line line, String dependency, String missingDependency) {
+		double size = 20;
+		StackPane weight = new StackPane();
+		weight.setStyle("-fx-background-color:grey;-fx-border-width:1px;-fx-border-color:black;");
+		weight.setPrefSize(size + 150, size);
+		weight.setMaxSize(size + 150, size);
+		weight.setMinSize(size + 150, size);
+		Label txt = new Label(dependency);
+		System.out.println("dependency is "+ dependency);
+		txt.setStyle("-fx-font-size:8px;-fx-font-weight:bold;");
+		txt.setTextFill(Color.color(1, 1, 1));
+		
+		Label missing = new Label(missingDependency);
+		missing.setStyle("-fx-font-size:8px;-fx-font-weight:bold;");
+		System.out.println(" missing dependency is "+ missingDependency);
+		missing.setTextFill(Color.RED);
+		weight.getChildren().add(txt);
+		weight.getChildren().add(missing);
+		weight.setAlignment( txt, Pos.TOP_CENTER );
+		weight.setAlignment(missing, Pos.BOTTOM_CENTER);
 
 		DoubleBinding wgtSqrHalfWidth = weight.widthProperty().divide(2);
 		DoubleBinding wgtSqrHalfHeight = weight.heightProperty().divide(2);

@@ -48,38 +48,38 @@ public class PanelApplication extends Application{
 		FileReader reader = new FileReader(path, graphCreator.getGraph());
 		reader.fillGraphWithInfoComingFromFile();
 		
-//	
-//		addGraphToPanel(pane, graphCreator,false, reader.getPipelines());
-//		
-//		for( String pipelineName : reader.getPipelines()) {
-//			// exclude external source node0
-//			List<NodeOfGraph> nodesInPipeline = graphCreator.getGraph().getNodes().stream().filter(e -> !e.getName().contentEquals("node0") && e.getPipelineBelongs().equals(pipelineName)).collect(Collectors.toList());
-//			// Keep inputs, outputs 
-//			for(NodeOfGraph node : nodesInPipeline) {
-//				List<Column> inputCols = node.getInputs().stream().collect(Collectors.toList());
-//				List<Column> outputCols = node.getOutputs().stream().collect(Collectors.toList());
-//				inputs.put(node.getName()+pipelineName, inputCols);
-//				outputs.put(node.getName()+pipelineName, outputCols);
-//			}
-//		}
-//		
-//		// Apply Topological Sorting to get the right order of nodes in Graph
-//		List<NodeOfGraph> nodesAfterTopologicalSorting = graphCreator.getNodesAfterTopologicalSorting();
-//		
-//		
-//		for(int i=0; i<nodesAfterTopologicalSorting.size(); i++) {
-//			NodeOfGraph node = nodesAfterTopologicalSorting.get(i);
-//			// exclude external source node0
-//			List<NodeOfGraph> nodes = graphCreator.getGraph().getNodes().stream().filter(e -> (!e.getName().contentEquals("node0")) && e.getName().equals(node.getName()) &&
-//					e.getPipelineBelongs().equals(node.getPipelineBelongs())).collect(Collectors.toList());
-//			if(!nodes.isEmpty()) {
-//				node.setInputs(inputs.get(nodes.get(0).getName()+nodes.get(0).getPipelineBelongs()));
-//				node.setOutputs(outputs.get(nodes.get(0).getName()+nodes.get(0).getPipelineBelongs()));
-//			}
-//		}
-//		
-//		graphCreator.getGraph().getNodes().clear();
-//		graphCreator.getGraph().setNodes(nodesAfterTopologicalSorting);
+	
+		addGraphToPanel(pane, graphCreator,false, reader.getPipelines());
+		
+		for( String pipelineName : reader.getPipelines()) {
+			// exclude external source node0
+			List<NodeOfGraph> nodesInPipeline = graphCreator.getGraph().getNodes().stream().filter(e -> !e.getName().contentEquals("node0") && e.getPipelineBelongs().equals(pipelineName)).collect(Collectors.toList());
+			// Keep inputs, outputs 
+			for(NodeOfGraph node : nodesInPipeline) {
+				List<Column> inputCols = node.getInputs().stream().collect(Collectors.toList());
+				List<Column> outputCols = node.getOutputs().stream().collect(Collectors.toList());
+				inputs.put(node.getName()+pipelineName, inputCols);
+				outputs.put(node.getName()+pipelineName, outputCols);
+			}
+		}
+		
+		// Apply Topological Sorting to get the right order of nodes in Graph
+		List<NodeOfGraph> nodesAfterTopologicalSorting = graphCreator.getNodesAfterTopologicalSorting();
+		
+		
+		for(int i=0; i<nodesAfterTopologicalSorting.size(); i++) {
+			NodeOfGraph node = nodesAfterTopologicalSorting.get(i);
+			// exclude external source node0
+			List<NodeOfGraph> nodes = graphCreator.getGraph().getNodes().stream().filter(e -> (!e.getName().contentEquals("node0")) && e.getName().equals(node.getName()) &&
+					e.getPipelineBelongs().equals(node.getPipelineBelongs())).collect(Collectors.toList());
+			if(!nodes.isEmpty()) {
+				node.setInputs(inputs.get(nodes.get(0).getName()+nodes.get(0).getPipelineBelongs()));
+				node.setOutputs(outputs.get(nodes.get(0).getName()+nodes.get(0).getPipelineBelongs()));
+			}
+		}
+		
+		graphCreator.getGraph().getNodes().clear();
+		graphCreator.getGraph().setNodes(nodesAfterTopologicalSorting);
 		pane.getChildren().addAll(addGraphToPanel(pane,graphCreator,true, reader.getPipelines()));
 		
 	}
@@ -104,10 +104,14 @@ public class PanelApplication extends Application{
 			}
 		}
 		// add edges between external source and other nodes.
-		// check here if column is missing from dataframe.
+		// check here for every node if column is missing from dataframe.
 		for (NodeOfGraph node : graph.getNodes()) {
+			if(node.getName().equals("node0")) {
+				continue;
+			}
 			NodeOfGraph nodeExternalSource = graph.getNodes().get(0);
-			graphCreator.createEdgesOfGraph(nodes, nodeExternalSource, node, pane, designLines);
+			// Check for every node if coming from other node else coming from dataframe.
+			graphCreator.createEdgesOfGraphFromDataFrame(nodes, nodeExternalSource, node, pane, designLines, graph.getNodes());
 		}
 		// take care that we have duplicate edges
 		List<Edge> edges = graphCreator.getGraph().getEdges().stream().distinct().collect(Collectors.toList());
