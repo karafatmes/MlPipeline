@@ -46,35 +46,30 @@ public class MainApplication extends AbstractHandler {
 		IJavaProject javaProject = ProjectAnalyzer.convertToIJavaProject(projectForAnalysis);
 
 		SourceAnalyzer sourceAnalyzer = new SourceAnalyzer(javaProject);
-		// print classes of project included in source package.
 
-//		sourceAnalyzer.printClassesIncludedInSourcePackages();
-
-		List<MethodDeclaration> allMethodDeclarations = new ArrayList<MethodDeclaration>();
 		for (ICompilationUnit unit : sourceAnalyzer.getCompilationUnits()) {
 			List<MethodDeclaration> methodDeclarations = sourceAnalyzer.getMethodDeclarationsOfClass(unit);
-			allMethodDeclarations.addAll(methodDeclarations);
-		}
-
-		DependencyAnalyzer dependencyAnalyzer = new DependencyAnalyzer(allMethodDeclarations);
-		for (MethodDeclaration decl : allMethodDeclarations) {          
-			dependencyAnalyzer.findMlLibDependencies(decl);
-		}
-		List<VariableDeclarationStatement> mlLibStatements = dependencyAnalyzer.getMlLibStatements();
-		
-		for( Pipeline pipeline : dependencyAnalyzer.getPipelines()) {
-
-			for (VariableDeclarationStatement statement : mlLibStatements) {
-	
-				dependencyAnalyzer.analyzeStagesOfPipeline(statement, dependencyAnalyzer.getNameOfStagesInPipeline().get(pipeline.getName()), pipeline.getName() );
-	
+			
+			DependencyAnalyzer dependencyAnalyzer = new DependencyAnalyzer(methodDeclarations);
+			for (MethodDeclaration decl : methodDeclarations) {          
+				dependencyAnalyzer.findMllibStatementsInMethod(decl);
 			}
 		}
-		FileExporter exporter = new FileExporter(dependencyAnalyzer.getPipelines(), columnsInFilefile);
-		exporter.exportStagesToExternalFile();
 
-//		GraphFactory factory = new GraphFactory(dependencyAnalyzer.getStagesOfPipeline());
+		for (Pipeline pipeline : DependencyAnalyzer.getPipelines()) {
+			for(VariableDeclarationStatement statement : DependencyAnalyzer.getMlLibStatementsInPipeline().get(pipeline.getName())) {
+				DependencyAnalyzer.analyzeStagesOfPipeline(statement, pipeline.getName());
+			}
+		}
+	
+		FileExporter exporter = new FileExporter(DependencyAnalyzer.getPipelines(), columnsInFilefile);
+		exporter.exportStagesToExternalFile();
 		
+		// Clear static content
+		DependencyAnalyzer.getPipelines().clear();
+		DependencyAnalyzer.getMlLibStatementsInPipeline().clear();
+		DependencyAnalyzer.getNameOfStagesInPipeline().clear();
+		DependencyAnalyzer.setNumberOfPipelines(0);
 		
 		printFinishMessage();
 

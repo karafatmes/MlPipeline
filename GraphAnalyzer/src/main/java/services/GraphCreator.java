@@ -79,7 +79,6 @@ public class GraphCreator implements Cloneable {
 		String weightInEdge ="";
 		
 		for( Column inputInNode : endEdgeNode.getInputs()) {
-			System.out.println("columnInNode is "+ inputInNode.getValue());
 			// if dont coming from other node it comes from external source - dataframe
 			if(!isComingFromOtherNodeInPipeline(inputInNode.getValue(), allNodesInGraph)) {
 				// column is not missing. 
@@ -111,8 +110,6 @@ public class GraphCreator implements Cloneable {
 						}
 						if (start != null & end != null) {
 							if (designLines) {
-								System.out.println(" weight is "+weight);
-								System.out.println("columnMissing is "+ columnsMissing);
 								buildSingleDirectionalLineComingFromDataFrame(start, end, pane, true, false, weight,columnsMissing, isFile);
 							}
 							int startIndex = graph.getNodes().indexOf(dataFrame);
@@ -235,7 +232,6 @@ public class GraphCreator implements Cloneable {
 					edgeToRemove = e;
 					edgesToBeRemoved.add(edgeToRemove);
 					if (nodeM.getInputs().isEmpty()) {
-						System.out.println(" add node " + nodeM.getName());
 						nodesWithNoIncomingEdges.add(nodeM);
 					}
 				}

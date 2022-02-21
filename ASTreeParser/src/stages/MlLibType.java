@@ -11,7 +11,11 @@ public enum MlLibType {
 	PipelineModel("PipelineModel"),
 	Pipeline("Pipeline"),
 	PipelineStage("PipelineStage"),
-	SparkSession("SparkSession");
+	SparkSession("SparkSession"),
+	HashingTF("HashingTF"),
+	Tokenizer("Tokenizer"),
+	DecisionTreeRegressor("DecisionTreeRegressor");
+	
 	
 	public final String label;
 	

@@ -52,13 +52,11 @@ public class UiElementsCreator {
 		weight.setMaxSize(size + 150, size);
 		weight.setMinSize(size + 150, size);
 		Label txt = new Label(dependency);
-		System.out.println("dependency is "+ dependency);
 		txt.setStyle("-fx-font-size:8px;-fx-font-weight:bold;");
 		txt.setTextFill(Color.color(1, 1, 1));
 		
 		Label missing = new Label(missingDependency);
 		missing.setStyle("-fx-font-size:8px;-fx-font-weight:bold;");
-		System.out.println(" missing dependency is "+ missingDependency);
 		missing.setTextFill(Color.RED);
 		weight.getChildren().add(txt);
 		weight.getChildren().add(missing);

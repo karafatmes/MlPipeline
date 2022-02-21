@@ -23,7 +23,7 @@ public class FileReader {
 		this.graph = graph;
 		this.path = path;
 		pipelines = new ArrayList<String>();
-	
+		pipelineName = "";
 	}
 
 	public static void fillGraphWithInfoComingFromFile() {
@@ -58,6 +58,7 @@ public class FileReader {
 				} else if (data.startsWith("------start of")) {
 					// new pipeline starts
 					pipelineName = data.substring(data.indexOf("of ")+3, data.length() - 5);
+					System.out.println("pipeline is " + pipelineName);
 					pipelines.add(pipelineName);
 					
 				} else if (data.startsWith("node")) {
@@ -71,24 +72,28 @@ public class FileReader {
 
 				} else if (data.startsWith("inputs")) {
 					// inputs of node
-					// fill the input arrays
-					String[] inputColumnsOfNode = data.substring(data.indexOf("[") + 1, data.indexOf("]"))
-							.replace("\"", "").replaceAll(" ", "").split(",");
-
-					for (String value : inputColumnsOfNode) {
-						Column inputColumn = new Column(value);
-						node.getInputs().add(inputColumn);
+					// fill the input array
+					if( data.contains("[") && data.contains("]")) {
+						String[] inputColumnsOfNode = data.substring(data.indexOf("[") + 1, data.indexOf("]"))
+								.replace("\"", "").replaceAll(" ", "").split(",");
+	
+						for (String value : inputColumnsOfNode) {
+							Column inputColumn = new Column(value);
+							node.getInputs().add(inputColumn);
+						}
 					}
 
 				} else if (data.startsWith("outputs")) {
 					// outputs of node
 					// fill the output arrays
-					String[] outputColumnsOfNode = data.substring(data.indexOf("[") + 1, data.indexOf("]"))
-							.replace("\"", "").replaceAll(" ", "").split(",");
-
-					for (String value : outputColumnsOfNode) {
-						Column outputColumn = new Column(value);
-						node.getOutputs().add(outputColumn);
+					if (data.contains("[")  && data.contains("]")) {
+						String[] outputColumnsOfNode = data.substring(data.indexOf("[") + 1, data.indexOf("]"))
+								.replace("\"", "").replaceAll(" ", "").split(",");
+	
+						for (String value : outputColumnsOfNode) {
+							Column outputColumn = new Column(value);
+							node.getOutputs().add(outputColumn);
+						}
 					}
 				}
 

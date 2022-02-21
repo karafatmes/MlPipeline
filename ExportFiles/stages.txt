@@ -1,16 +1,30 @@
-columnsOfFile:[id, featurecol1, featurec2, featurecol3, feature_1, feature_2, feature_3, feature_4, label]
+columnsOfFile:[id, featurecol, featurecol2, featurecol3, feature_1, feature_2, feature_3, feature_4, label, text, labelDesiciso, feature_dis1, feature_dis2, feature_dis3, category_1, category_2]
 -------
 ------start of pipeline0-----
-node1: VectorAssembler
-inputs for node1:["featurecol1", "featurecol2", "featurecol3"]
-outputs for node1:["features"]
+node1: StringIndexer
+inputs for node1:["category_1", "category_2"]
+outputs for node1:["category_1_index", "category_2_index"]
 -------
-node2: MinMaxScaler
-inputs for node2:["features"]
-outputs for node2:["sfeatures"]
+node2: OneHotEncoder
+inputs for node2:["category_2_index"]
+outputs for node2:["category_2_OHE"]
 -------
 ------end of pipeline0-----
 ------start of pipeline1-----
+node1: StringIndexer
+inputs for node1:["labelDesicison"]
+outputs for node1:["labelIndex"]
+-------
+node2: VectorAssembler
+inputs for node2:["feature_dis1", "feature_dis2", "feature_dis3"]
+outputs for node2:["features"]
+-------
+node3: DecisionTreeRegressor
+inputs for node3:["labelIndex", "features"]
+outputs for node3:[]
+-------
+------end of pipeline1-----
+------start of pipeline2-----
 node1: StringIndexer
 inputs for node1:["feature_2", "feature_3"]
 outputs for node1:["feature_2_index", "feature_3_index"]
@@ -27,4 +41,28 @@ node4: LogisticRegression
 inputs for node4:["features"]
 outputs for node4:["label"]
 -------
-------end of pipeline1-----
+------end of pipeline2-----
+------start of pipeline3-----
+node1: VectorAssembler
+inputs for node1:["featurecol1", "featurecol2", "featurecol3"]
+outputs for node1:["features"]
+-------
+node2: MinMaxScaler
+inputs for node2:["features"]
+outputs for node2:["sfeatures"]
+-------
+------end of pipeline3-----
+------start of pipeline4-----
+node1: Tokenizer
+inputs for node1:["text"]
+outputs for node1:["words"]
+-------
+node2: HashingTF
+inputs for node2:["words"]
+outputs for node2:["features"]
+-------
+node3: LogisticRegression
+inputs for node3:[10]
+outputs for node3:[10]
+-------
+------end of pipeline4-----
