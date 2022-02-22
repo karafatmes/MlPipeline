@@ -12,20 +12,6 @@ outputs for node2:["category_2_OHE"]
 ------end of pipeline0-----
 ------start of pipeline1-----
 node1: StringIndexer
-inputs for node1:["labelDesicison"]
-outputs for node1:["labelIndex"]
--------
-node2: VectorAssembler
-inputs for node2:["feature_dis1", "feature_dis2", "feature_dis3"]
-outputs for node2:["features"]
--------
-node3: DecisionTreeRegressor
-inputs for node3:["labelIndex", "features"]
-outputs for node3:[]
--------
-------end of pipeline1-----
-------start of pipeline2-----
-node1: StringIndexer
 inputs for node1:["feature_2", "feature_3"]
 outputs for node1:["feature_2_index", "feature_3_index"]
 -------
@@ -41,8 +27,8 @@ node4: LogisticRegression
 inputs for node4:["features"]
 outputs for node4:["label"]
 -------
-------end of pipeline2-----
-------start of pipeline3-----
+------end of pipeline1-----
+------start of pipeline2-----
 node1: VectorAssembler
 inputs for node1:["featurecol1", "featurecol2", "featurecol3"]
 outputs for node1:["features"]
@@ -51,8 +37,8 @@ node2: MinMaxScaler
 inputs for node2:["features"]
 outputs for node2:["sfeatures"]
 -------
-------end of pipeline3-----
-------start of pipeline4-----
+------end of pipeline2-----
+------start of pipeline3-----
 node1: Tokenizer
 inputs for node1:["text"]
 outputs for node1:["words"]
@@ -65,4 +51,4 @@ node3: LogisticRegression
 inputs for node3:[10]
 outputs for node3:[10]
 -------
-------end of pipeline4-----
+------end of pipeline3-----
