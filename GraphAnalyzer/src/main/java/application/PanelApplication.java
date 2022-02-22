@@ -46,6 +46,9 @@ public class PanelApplication extends Application{
 		GraphCreator graphCreator = new GraphCreator();
 		String path = "/Users/sakes/Documents/Development/MlPipelineProjects/ExportFiles/stages.txt";
 		FileReader reader = new FileReader(path, graphCreator.getGraph());
+		
+		// start from here to measure the time of execution
+		long start = System.currentTimeMillis();
 		reader.fillGraphWithInfoComingFromFile();
 		
 	
@@ -82,6 +85,9 @@ public class PanelApplication extends Application{
 		graphCreator.getGraph().setNodes(nodesAfterTopologicalSorting);
 		pane.getChildren().addAll(addGraphToPanel(pane,graphCreator,true, reader.getPipelines()));
 		
+		long end = System.currentTimeMillis();
+		long duration = (end - start);
+		System.out.println(" duration is " + duration);
 	}
 	
 	public ArrayList<StackPane> addGraphToPanel(Pane pane, GraphCreator graphCreator, boolean designLines, List<String> pipelines) {

@@ -27,7 +27,7 @@ public class MainApplication extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 
 		printWelcomeMessage();
-
+		
 		IProject[] projects = WorkspaceAnalyzer.findProjectsInWorkspace();
 
 		List<IProject> projectsWithJavaSourceCode = ProjectAnalyzer.keepOnlyProjectsContainedJavaSourceCode(projects);
@@ -37,6 +37,8 @@ public class MainApplication extends AbstractHandler {
 		// based on choice user choose project for analysis.
 		int choice = readChoice();
 
+		// start from here to measure time of execution of ASTParser
+		long start = System.currentTimeMillis();
 		IProject projectForAnalysis = ProjectAnalyzer.getProjectForAnalysis(choice, projectsWithJavaSourceCode);
 
 		// Analyze file that contains the data
@@ -64,6 +66,10 @@ public class MainApplication extends AbstractHandler {
 	
 		FileExporter exporter = new FileExporter(DependencyAnalyzer.getPipelines(), columnsInFilefile);
 		exporter.exportStagesToExternalFile();
+		
+		long end = System.currentTimeMillis();
+		long duration = (end - start);
+		System.out.println(" duration is "+ duration);
 		
 		// Clear static content
 		DependencyAnalyzer.getPipelines().clear();
