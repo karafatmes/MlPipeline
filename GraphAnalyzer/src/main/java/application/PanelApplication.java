@@ -111,6 +111,7 @@ public class PanelApplication extends Application{
 		}
 		// add edges between external source and other nodes.
 		// check here for every node if column is missing from dataframe.
+		
 		for (NodeOfGraph node : graph.getNodes()) {
 			if(node.getName().equals("node0")) {
 				continue;
@@ -119,6 +120,7 @@ public class PanelApplication extends Application{
 			// Check for every node if coming from other node else coming from dataframe.
 			graphCreator.createEdgesOfGraphFromDataFrame(nodes, nodeExternalSource, node, pane, designLines, graph.getNodes());
 		}
+		
 		// take care that we have duplicate edges
 		List<Edge> edges = graphCreator.getGraph().getEdges().stream().distinct().collect(Collectors.toList());
 		graphCreator.getGraph().getEdges().clear();
